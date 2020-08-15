@@ -1,0 +1,72 @@
+Git 常用命令：
+
+1、git clone <url>
+## 项目克隆，url填仓库地址
+2、git add . | <fileName>
+## 新增changes到暂存区
+3、git commit -m "提交注释"
+## 将暂存区的changes提交到本地仓库
+4、git push
+## 将本地仓库的changes提交到远程关联仓库
+5、git pull
+## 将远程关联仓库拉取并更新到本地仓库
+6、git checkout 本地分支
+## 切换到另外一个本地分支
+7、git checkout -b 新本地分支
+## 新建并切换到一个新本地分支
+8、git push --set-upstream origin 新远程分支
+## 新建并提交到新远程仓库
+9、git branch --set-upstream-to=origin/远程分支 本地分支
+## 将已有的远程仓库关联本地仓库
+10、git status
+## 查看工作目录的changes
+11、git log
+## 查看显示所有提交过的版本信息
+12、git reflog
+## 查看所有分支的所有操作记录
+13、git log --online
+## 只会显示版本号和提交时的备注信息
+14、git config --globel username "用户名"
+## 设置用户名
+15、git config --globel email "邮箱"
+## 设置邮箱【自己仓库的登录邮箱】
+15、git config list --globel
+## 查看Git所有的全局配置
+16、git stash save "缓存注释"
+## 将暂存区的changes保存起来，并且恢复工作目录
+17、git stash apply stash@{index}
+## 将指定保存的缓存记录恢复到工作目录
+18、git stash pop
+## 将最新一次缓存记录恢复到工作目录
+19、git stash list
+## 查看缓存记录列表
+20、git stash clear
+## 清除所有缓存
+21、git stash drop stash@{index}
+清除指定缓存记录
+22、git clean -df
+## 清除Untracted Files
+23、git pull --rebase
+## 拉取代码，并合并提交记录
+24、git merge 本地分支
+## 合并本地分支到当前分支
+25、git merge --abort
+## 撤回合并命令
+26、git merge --continue
+## 合并继续
+27、git commit --amend
+## 追加提交
+28、git rebase -i HEAD~<提交次数>
+## 修改提交【慎用！】
+29、git push -f
+## 强制覆盖远程分支【慎用！】
+30、git reset HEAD~ --hard | --soft
+## 撤回已经提交到远程仓库的提交记录，--hard是指不保留changes【慎用！】，--soft保留changes到工作目录
+31、git init
+## 初始化一个本地仓库
+32、git push -d origin 远程分支
+## 删除远程分支【慎用！】
+
+----------------------------------------第一次提交by zhangwubing，欢迎补充。
+
+
