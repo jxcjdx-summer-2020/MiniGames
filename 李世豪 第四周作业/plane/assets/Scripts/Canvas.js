@@ -4,7 +4,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        createTimer:2,
+        createTimer:2,//敌机生成时间间隔
         bullet:{
             default:null,
             type:cc.Prefab
@@ -29,12 +29,14 @@ cc.Class({
         let planePosX=this.myPlane.x;
         let planePosY=this.myPlane.y+55;
         this.newBullet1.setPosition(cc.v2(planePosX,planePosY));
+        //方便其他脚本调用
+        this.newBullet1.getComponent('Bullet').bul = this;
     },
 
     EPosition:function(){ //敌机随机坐标
         let randx=0;
         //在屏幕外生成
-        let randY = this.node.y+this.node.height/2+10;
+        let randY =this.node.height/2+10;
         let maxX=this.node.x-74;
         randx=(Math.random()-0.5)*2* maxX;
         return cc.v2(randx, randY);
@@ -45,7 +47,7 @@ cc.Class({
         newEnemyPlane.parent=this.node;
         newEnemyPlane.setPosition(this.EPosition());
         //方便其他脚本调用
-        newEnemyPlane.getComponent('enemyPlane').dis = this;
+        newEnemyPlane.getComponent('enemyPlane').enm = this;
     },
     gainScore: function () { //获取分数
         this.score += 1;
