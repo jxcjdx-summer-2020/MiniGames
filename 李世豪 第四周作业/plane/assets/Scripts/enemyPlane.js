@@ -8,21 +8,16 @@ cc.Class({
     },
 
     onCollisionEnter:function(other,self){              //碰撞则销毁物体
-        if (other.node.group != 'bullet'){
+        if (other.node.group != 'bullet' && other.node.group != 'Player'){
             return ;
         }
         if(other.node.group == 'bullet') //检测碰撞组
         {   
-            this.dis.newBullet1.getComponent('Bullet').destroySelf();
-            this.dis.gainScore();
+            this.enm.gainScore();
             this.enemyDestroy();
         }
         else if(other.node.group == 'Player'){
-            //this.dis.myPlane.getComponent('MyPlane').destroySelf();
-            //this.enemyDestroy();
-            //this.dis.unschedule(this.bulletFire.bind(this.dis));
-            //this.dis.score=0;
-            cc.director.loadScene('plane');
+            cc.director.loadScene('plane'); //撞到重新开始
         }
     },
 
@@ -43,10 +38,12 @@ cc.Class({
 
     start:function () {
         this.schedule(this.enemyMove.bind(this),0.02);
-        this.schedule(this.enemyDestroy.bind(this),8);
     },
 
     update:function (dt) {
+        if (this.node.y<-this.enm.node.height/2){ //超出下边界就销毁
+            this.enemyDestroy();
+        }
     },
     
 });
