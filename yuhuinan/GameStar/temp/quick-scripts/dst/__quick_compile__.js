@@ -1,6 +1,6 @@
 
 (function () {
-var scripts = [{"deps":{"./assets/migration/use_v2.0.x_cc.Toggle_event":1,"./assets/scripts/ScoreAnim":2,"./assets/scripts/ScoreFX":3,"./assets/scripts/Player":4,"./assets/scripts/Star":5,"./assets/scripts/Game":6},"path":"preview-scripts/__qc_index__.js"},{"deps":{},"path":"preview-scripts/assets/migration/use_v2.0.x_cc.Toggle_event.js"},{"deps":{},"path":"preview-scripts/assets/scripts/ScoreAnim.js"},{"deps":{},"path":"preview-scripts/assets/scripts/ScoreFX.js"},{"deps":{},"path":"preview-scripts/assets/scripts/Player.js"},{"deps":{},"path":"preview-scripts/assets/scripts/Star.js"},{"deps":{"Player":4,"ScoreFX":3,"Star":5},"path":"preview-scripts/assets/scripts/Game.js"}];
+var scripts = [{"deps":{"./assets/migration/use_v2.0.x_cc.Toggle_event":2,"./assets/scripts/Player":3,"./assets/scripts/ScoreFX":4,"./assets/scripts/Star":5,"./assets/scripts/ScoreAnim":6,"./assets/scripts/Game":1},"path":"preview-scripts/__qc_index__.js"},{"deps":{"Player":3,"ScoreFX":4,"Star":5},"path":"preview-scripts/assets/scripts/Game.js"},{"deps":{},"path":"preview-scripts/assets/migration/use_v2.0.x_cc.Toggle_event.js"},{"deps":{},"path":"preview-scripts/assets/scripts/Player.js"},{"deps":{},"path":"preview-scripts/assets/scripts/ScoreFX.js"},{"deps":{},"path":"preview-scripts/assets/scripts/Star.js"},{"deps":{},"path":"preview-scripts/assets/scripts/ScoreAnim.js"}];
 var entries = ["preview-scripts/__qc_index__.js"];
 
 /**
