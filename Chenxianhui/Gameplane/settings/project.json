@@ -11,6 +11,21 @@
     [
       false,
       true,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      true,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      false,
+      true,
       false
     ]
   ],
@@ -22,7 +37,9 @@
   "group-list": [
     "default",
     "enemy",
-    "bullet"
+    "bullet",
+    "boss",
+    "plane"
   ],
   "start-scene": "0eb834cd-bcea-4a78-b702-23505ef78b16",
   "design-resolution-width": 960,

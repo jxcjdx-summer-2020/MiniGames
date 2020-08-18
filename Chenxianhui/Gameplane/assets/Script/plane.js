@@ -50,7 +50,7 @@ onKeyUp (event) {
         this.accRight = false;
         this.accUp=false;
         this.accDown = false;
-      
+        cc.director.getCollisionManager().enabled = true;
         // 初始化键盘输入监听
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);   
@@ -69,6 +69,13 @@ onKeyUp (event) {
         if(this.node.y<=(-320+this.he)){
             this.accDown=false
         }
+        if(this.node.x<=(-480+this.length) ){
+            this.accLeft=false;
+
+        }
+        if( this.node.x>=(480-this.length)){
+            this.accRight=false;
+        }
 
 
 
@@ -86,11 +93,18 @@ onKeyUp (event) {
         }
         this.length=this.node.width/2
         
-        if(this.node.x<=(-480+this.length) || this.node.x>=(480-this.length)){
-            this.node.x=-this.node.x
-
-        }
+      
 
 
     },
+    gameOver: function () {
+      
+        this.node.stopAllActions(); //停止 player 节点的跳跃动作
+        cc.director.loadScene('StartGame');
+    },
+    onCollisionEnter: function(other,self){
+       this.gameOver()
+
+    }
+
 });

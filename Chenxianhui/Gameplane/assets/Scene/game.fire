@@ -78,17 +78,14 @@
         "__id__": 7
       },
       {
-        "__id__": 10
+        "__id__": 11
       },
       {
-        "__id__": 12
+        "__id__": 13
       }
     ],
     "_active": true,
     "_components": [
-      {
-        "__id__": 14
-      },
       {
         "__id__": 15
       },
@@ -97,6 +94,9 @@
       },
       {
         "__id__": 17
+      },
+      {
+        "__id__": 18
       }
     ],
     "_prefab": null,
@@ -354,6 +354,9 @@
       },
       {
         "__id__": 9
+      },
+      {
+        "__id__": 10
       }
     ],
     "_prefab": null,
@@ -400,8 +403,8 @@
     "_skewX": 0,
     "_skewY": 0,
     "_is3DNode": false,
-    "_groupIndex": 0,
-    "groupIndex": 0,
+    "_groupIndex": 4,
+    "groupIndex": 4,
     "_id": "bbOOyBVKNBeb0KiV45L5C3"
   },
   {
@@ -447,6 +450,27 @@
     "_id": "aaGp7ETCNE4K0B2rnAmFcz"
   },
   {
+    "__type__": "cc.BoxCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 7
+    },
+    "_enabled": true,
+    "tag": 0,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_size": {
+      "__type__": "cc.Size",
+      "width": 130,
+      "height": 150
+    },
+    "_id": "c5fbz8TxpMi4p409md4w1W"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "New Label",
     "_objFlags": 0,
@@ -457,7 +481,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 11
+        "__id__": 12
       }
     ],
     "_prefab": null,
@@ -513,7 +537,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 10
+      "__id__": 11
     },
     "_enabled": true,
     "_materials": [
@@ -551,7 +575,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 13
+        "__id__": 14
       }
     ],
     "_prefab": null,
@@ -607,7 +631,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 12
+      "__id__": 13
     },
     "_enabled": true,
     "_materials": [
@@ -702,16 +726,20 @@
     "enemyPrefab": {
       "__uuid__": "5863fc32-9809-4537-8ae3-416f01082b13"
     },
+    "bossPrefab": {
+      "__uuid__": "ca936dc0-c73a-4036-8b00-c9ceee2afac6"
+    },
     "plane": {
       "__id__": 7
     },
     "scoreDisplay": {
-      "__id__": 11
+      "__id__": 12
     },
     "HeighestscoreDisplay": {
-      "__id__": 13
+      "__id__": 14
     },
     "score": 0,
+    "gamenode": 0,
     "_id": "f9c/KGVe5NV4caMp51T9w2"
   }
 ]

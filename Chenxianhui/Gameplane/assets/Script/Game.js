@@ -19,6 +19,10 @@ cc.Class({
         default: null,
         type: cc.Prefab
       },
+      bossPrefab: {
+        default: null,
+        type: cc.Prefab
+      },
     plane: {
         default: null,
         type: cc.Node
@@ -74,13 +78,7 @@ cc.Class({
 
     update: function (dt) {
        
-        // if (this.getBulletDistance() < this.pickRadius) {
-        //     // 调用收集行为
-        //     this.onenemydestroy();
-        //     return;
-        // }
-        
-
+    
 
     },
 
@@ -117,11 +115,26 @@ cc.Class({
         var y=320;
         return cc.v2(x,y)
     },
+
+    newboss:function(){
+        this.new_boss=cc.instantiate(this.bossPrefab);
+        this.node.addChild(this.new_boss);
+        this.new_boss.setPosition(this.getNewBossPosition());
+        this.new_boss.getComponent('Boss').game = this;
+    },
+    getNewBossPosition:function(){
+        var boss_wid=this.bossPrefab.width/2;
+        var enemy_he=this.bossPrefab.height/2;
+        var x=  Math.random()*940-480;
+        var y=320;
+        return cc.v2(x,y)
+    },
     start:function(){
         this.newenemy()
          this.schedule(this.newenemy,2)
          this.newbullet()
-         this.schedule(this.newbullet,1)
+         this.schedule(this.newbullet,0.7)
+         this.schedule(this.newboss,5,0)
         
          
     },
