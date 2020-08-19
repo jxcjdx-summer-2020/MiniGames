@@ -87,9 +87,6 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 28
-      },
-      {
         "__id__": 29
       },
       {
@@ -97,6 +94,9 @@
       },
       {
         "__id__": 31
+      },
+      {
+        "__id__": 32
       }
     ],
     "_prefab": null,
@@ -111,7 +111,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 720,
-      "height": 1080
+      "height": 1280
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -123,7 +123,7 @@
       "ctor": "Float64Array",
       "array": [
         360,
-        540,
+        640,
         0,
         0,
         0,
@@ -186,7 +186,7 @@
       "array": [
         0,
         0,
-        350.1990226553324,
+        342.18828767032636,
         0,
         0,
         0,
@@ -323,9 +323,9 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "6ca3e030-8a61-4cfb-aab1-13bec4330e8c"
+      "__uuid__": "9d35661a-5d2c-4df3-841c-b8955da7429f"
     },
-    "_type": 2,
+    "_type": 0,
     "_sizeMode": 0,
     "_fillType": 2,
     "_fillCenter": {
@@ -386,7 +386,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -230,
+        -341.979,
         0,
         0,
         0,
@@ -698,7 +698,7 @@
       "ctor": "Float64Array",
       "array": [
         268.13,
-        488.49199999999996,
+        588.492,
         0,
         0,
         0,
@@ -759,8 +759,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -18.377,
-        100,
+        0,
+        -10,
         0,
         0,
         0,
@@ -855,8 +855,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -18.861,
-        -8.427,
+        10,
+        -100,
         0,
         0,
         0,
@@ -977,7 +977,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "playagain",
+    "_name": "gameover",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -987,8 +987,12 @@
         "__id__": 24
       }
     ],
-    "_active": true,
-    "_components": [],
+    "_active": false,
+    "_components": [
+      {
+        "__id__": 28
+      }
+    ],
     "_prefab": null,
     "_opacity": 255,
     "_color": {
@@ -1000,8 +1004,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
-      "height": 100
+      "width": 720,
+      "height": 1280
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1012,8 +1016,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        200,
-        -450,
+        0,
+        0,
         0,
         0,
         0,
@@ -1035,7 +1039,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "d7HfZNbYJM9K9Wg6Q1NArJ"
+    "_id": "cc5w0sLGRFaa0xo+NQ6kQu"
   },
   {
     "__type__": "cc.Node",
@@ -1077,8 +1081,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -1.189,
-        4.918,
+        0,
+        -200,
         0,
         0,
         0,
@@ -1103,7 +1107,7 @@
     "_id": "a9Caa0lmdAYbj0uK1wPj4k"
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "cc.Label",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1115,24 +1119,26 @@
         "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
       }
     ],
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "05348279-674f-4b30-be13-a8722c539bba"
+    "_useOriginalSize": true,
+    "_string": "PLAY",
+    "_N$string": "PLAY",
+    "_fontSize": 100,
+    "_lineHeight": 100,
+    "_enableWrapText": true,
+    "_N$file": {
+      "__uuid__": "d9db55d5-8bad-4ca5-8246-ca1d39cd3b7b"
     },
-    "_type": 0,
-    "_sizeMode": 0,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_atlas": null,
-    "_id": "48HcPzFuVFoLVrKtUbHzW5"
+    "_isSystemFontUsed": false,
+    "_spacingX": 0,
+    "_batchAsBitmap": false,
+    "_styleFlags": 0,
+    "_underlineHeight": 0,
+    "_N$horizontalAlign": 1,
+    "_N$verticalAlign": 1,
+    "_N$fontFamily": "Arial",
+    "_N$overflow": 0,
+    "_N$cacheMode": 0,
+    "_id": "31lI5e7b9HApRJTzesj9Gm"
   },
   {
     "__type__": "cc.Button",
@@ -1233,6 +1239,38 @@
     "customEventData": ""
   },
   {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 23
+    },
+    "_enabled": true,
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
+    "_spriteFrame": {
+      "__uuid__": "3c57201e-d324-40c7-861c-c16752b3be72"
+    },
+    "_type": 0,
+    "_sizeMode": 0,
+    "_fillType": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_atlas": null,
+    "_id": "c0Z38WzdZOPI8AF7GI8YRN"
+  },
+  {
     "__type__": "cc.Canvas",
     "_name": "",
     "_objFlags": 0,
@@ -1243,7 +1281,7 @@
     "_designResolution": {
       "__type__": "cc.Size",
       "width": 720,
-      "height": 1080
+      "height": 1280
     },
     "_fitWidth": true,
     "_fitHeight": true,

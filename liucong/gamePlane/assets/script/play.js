@@ -25,21 +25,21 @@ cc.Class({
             var offset = t.getDelta();
             this.node.x += offset.x;
             this.node.y += offset.y;
-            if (this.node.x >= 720) {
-                this.node.x = 720;
+            if (this.node.x >= 360) {
+                this.node.x = 360;
             }
-            if (this.node.x <= -720) {
-                this.node.x = -720;
+            if (this.node.x <= -360) {
+                this.node.x = -360;
             }
-            if (this.node.y <= -1280) {
-                this.node.y = -1280;
+            if (this.node.y <= -640) {
+                this.node.y = -640;
             }
         }.bind(this), this.node);
 
-        this.shoot_flag = 3; 
+        this.shoot_flag = 2; 
 
         this.root = cc.find("Canvas");
-        this.palyAgain = cc.find("Canvas/playagain");
+        this.gameOver = cc.find("Canvas/gameover");
         
     },
 
@@ -52,13 +52,13 @@ cc.Class({
         this.anim.getComponent(cc.Animation).play();
         this.scheduleOnce(function() {
             this.node.removeFromParent();
-            this.palyAgain.active = true;
+            this.gameOver.active = true;
         }, 1);
     
     },
 
     play_shoot_bullet: function() {
-        this.schedule(this._shoot_bullet.bind(this), 0.5);
+        this.schedule(this._shoot_bullet.bind(this), 0.3);
     },
 
     // 发射一般子弹
@@ -79,27 +79,27 @@ cc.Class({
     // 发射多枚子弹
     _shoot_more_bullet: function() {
         
-        if (this.shoot_flag != 3) {
+        if (this.shoot_flag != 2) {
             return ;
         }
 
         var bullet = [];
 
-        for (var i=0; i<3; i++){
+        for (var i=0; i<2; i++){
             bullet[i] = cc.instantiate(this.bullet_prefab);
             this.node.parent.addChild(bullet[i]);
         }
 
-        bullet[0].x = this.node.x;
+        bullet[0].x = this.node.x + 25;
         bullet[0].y = this.node.y;
 
         bullet[1].x = this.node.x - 25;
         bullet[1].y = this.node.y;
-        bullet[1].getComponent("bullet").speed_x = -50;
+        //bullet[1].getComponent("bullet").speed_x = -50;
 
-        bullet[2].x = this.node.x + 25;
-        bullet[2].y = this.node.y;
-        bullet[2].getComponent("bullet").speed_x = 50;
+        // bullet[2].x = this.node.x + 25;
+        // bullet[2].y = this.node.y;
+        // bullet[2].getComponent("bullet").speed_x = 50;
 
     },
 });

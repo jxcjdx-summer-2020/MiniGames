@@ -26,7 +26,7 @@ cc.Class({
         this.node.x += sx;
         this.node.y += sy;
         
-        if (this.node.y >= 540 || this.node.x >= 360 || this.node.x <= -360) {
+        if (this.node.y >= 650 || this.node.x >= 330 || this.node.x <= -330) {
             this.node.removeFromParent();
             return ;
         }

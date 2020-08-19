@@ -3,6 +3,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+
         is_enbale: true,
         is_debug: true,
 
@@ -25,16 +26,16 @@ cc.Class({
             var manager = cc.director.getCollisionManager();
             manager.enabled = true; // 开启碰撞
             if (this.is_debug) {
-                manager.enabledDebugDraw = true; // 调试状态绘制出我们物体的碰撞器的形状
+                manager.enabledDebugDraw = true; 
             }
         }
         this.kill_num = 0;
         this.score = cc.find(this.score_path).getComponent(cc.Label);
         this.player = cc.find("Canvas/player").getComponent("play");
-        this.playagain = this.node.getChildByName("playagain");
-        this.playagain.zIndex = 100;
+        this.gameover = this.node.getChildByName("gameover");
+        this.gameover.zIndex = 100;
     },
-
+    
     start: function() {
         // 随机产生一组敌人
         this._gen_random_group();
@@ -58,8 +59,8 @@ cc.Class({
         }
         var g = cc.instantiate(this.groups_prefab[g_type - 1]);
         this.node.addChild(g);
-        g.x = (Math.random() - 0.5) * 500;
-        g.y = (Math.random()) * 100 + 800;
+        g.x = (Math.random() - 0.5) * 360;
+        g.y = (Math.random()) * 100 + 500;
         this.scheduleOnce(this._gen_random_group.bind(this), Math.random() * 1 + 2);
     },
     // 点击重玩按钮

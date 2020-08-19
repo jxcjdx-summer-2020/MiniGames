@@ -36,11 +36,22 @@
     ]
   ],
   "excluded-modules": [
-    "3D Physics/Builtin"
+    "Collider",
+    "Mask",
+    "Mesh",
+    "MotionStreak",
+    "NodePool",
+    "Native Socket",
+    "Physics",
+    "3D",
+    "3D Primitive",
+    "3D Physics/cannon.js",
+    "3D Physics/Builtin",
+    "3D Particle"
   ],
-  "last-module-event-record-time": 0,
-  "design-resolution-width": 960,
-  "design-resolution-height": 640,
+  "last-module-event-record-time": 1597634657336,
+  "design-resolution-width": 720,
+  "design-resolution-height": 1280,
   "fit-width": false,
   "fit-height": true,
   "use-project-simulator-setting": false,
@@ -60,5 +71,6 @@
     "live": {
       "enable": false
     }
-  }
+  },
+  "start-scene": "97d7ba13-b11e-46db-a0d4-0c96e6c075d6"
 }
