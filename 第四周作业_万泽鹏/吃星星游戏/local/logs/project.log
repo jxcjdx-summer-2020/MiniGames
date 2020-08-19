@@ -1,0 +1,72 @@
+2020-08-16T12:28:16.710Z - normal: Load ~/.CocosCreator/settings.json
+2020-08-16T12:28:16.804Z - normal: Initializing Asset Database
+2020-08-16T12:28:16.821Z - normal: checking language setting...
+2020-08-16T12:28:16.821Z - normal: Language: zh
+2020-08-16T12:28:17.855Z - success: preview server running at http://localhost:7456
+2020-08-16T12:28:17.860Z - success: protocol editor-framework registered
+2020-08-16T12:28:17.860Z - success: protocol app registered
+2020-08-16T12:28:17.860Z - success: protocol theme registered
+2020-08-16T12:28:17.860Z - success: protocol packages registered
+2020-08-16T12:28:17.860Z - success: protocol uuid registerred
+2020-08-16T12:28:17.860Z - success: protocol db registerred
+2020-08-16T12:28:17.861Z - success: protocol thumbnail registerred
+2020-08-16T12:28:17.861Z - success: protocol unpack registerred
+2020-08-16T12:28:17.861Z - success: protocol disable-commonjs registerred
+2020-08-16T12:28:18.787Z - normal: connected!
+2020-08-16T12:28:18.789Z - normal: Check project G:\迅雷下载\start_project
+2020-08-16T12:28:18.791Z - normal: Initializing project G:\迅雷下载\start_project
+2020-08-16T12:28:18.818Z - success: adapters loaded
+2020-08-16T12:28:18.821Z - success: asset-db-debugger loaded
+2020-08-16T12:28:18.887Z - success: fb-audience-network loaded
+2020-08-16T12:28:18.914Z - success: fb-live-stream loaded
+2020-08-16T12:28:18.916Z - success: google-play-instant loaded
+2020-08-16T12:28:18.916Z - success: huawei-adapter loaded
+2020-08-16T12:28:18.917Z - success: jkw-adapter loaded
+2020-08-16T12:28:18.917Z - success: jsb-adapter loaded
+2020-08-16T12:28:18.918Z - success: oppo-adapter loaded
+2020-08-16T12:28:18.920Z - success: package-manager loaded
+2020-08-16T12:28:18.920Z - success: qtt-adapter loaded
+2020-08-16T12:28:18.922Z - success: runtime-dev-tools loaded
+2020-08-16T12:28:18.926Z - success: sdkbox loaded
+2020-08-16T12:28:18.928Z - success: ui-kit-preview-extra loaded
+2020-08-16T12:28:18.930Z - success: ui-kit-preview loaded
+2020-08-16T12:28:18.930Z - success: vivo-adapter loaded
+2020-08-16T12:28:18.976Z - success: alipay-minigame loaded
+2020-08-16T12:28:19.027Z - success: assets loaded
+2020-08-16T12:28:19.029Z - success: baidugame-opendata loaded
+2020-08-16T12:28:19.031Z - success: baidugame loaded
+2020-08-16T12:28:19.032Z - success: builder loaded
+2020-08-16T12:28:19.167Z - success: cocos-services loaded
+2020-08-16T12:28:19.171Z - success: console loaded
+2020-08-16T12:28:19.172Z - success: curve-editor loaded
+2020-08-16T12:28:19.183Z - success: fb-instant-games loaded
+2020-08-16T12:28:19.185Z - success: game-window loaded
+2020-08-16T12:28:19.186Z - success: google-instant-games loaded
+2020-08-16T12:28:19.188Z - success: hierarchy loaded
+2020-08-16T12:28:19.191Z - success: huawei-runtime loaded
+2020-08-16T12:28:19.193Z - success: inspector loaded
+2020-08-16T12:28:19.259Z - success: cpk-publish loaded
+2020-08-16T12:28:19.260Z - success: keystore loaded
+2020-08-16T12:28:19.263Z - success: node-library loaded
+2020-08-16T12:28:19.263Z - success: open-recent-items loaded
+2020-08-16T12:28:19.266Z - success: oppo-runtime loaded
+2020-08-16T12:28:19.267Z - success: package-asset loaded
+2020-08-16T12:28:19.268Z - success: preferences loaded
+2020-08-16T12:28:19.269Z - success: project-importer loaded
+2020-08-16T12:28:19.270Z - success: project-settings loaded
+2020-08-16T12:28:19.284Z - success: qtt-runtime loaded
+2020-08-16T12:28:19.286Z - success: scene loaded
+2020-08-16T12:28:19.287Z - success: simulator-debugger loaded
+2020-08-16T12:28:19.287Z - success: sprite-editor loaded
+2020-08-16T12:28:19.289Z - success: store loaded
+2020-08-16T12:28:19.291Z - success: timeline loaded
+2020-08-16T12:28:19.294Z - success: vivo-runtime loaded
+2020-08-16T12:28:19.297Z - success: wechatgame-opendata loaded
+2020-08-16T12:28:19.300Z - success: wechatgame loaded
+2020-08-16T12:28:19.303Z - success: xiaomi-runtime loaded
+2020-08-16T12:28:21.077Z - info: Cocos Service load base data!
+2020-08-16T12:28:21.122Z - normal: Initializing Cocos2d
+2020-08-16T12:28:22.768Z - normal: Initializing engine extends
+2020-08-16T12:28:33.903Z - normal: Loading packages
+2020-08-16T12:28:33.909Z - normal: Watching packages
+2020-08-16T12:28:33.938Z - normal: Run Application

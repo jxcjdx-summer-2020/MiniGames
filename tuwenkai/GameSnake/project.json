@@ -1,0 +1,7 @@
+{
+  "engine": "cocos-creator-js",
+  "packages": "packages",
+  "name": "GameSnake",
+  "id": "cfb7d4f0-9b0e-4553-bacb-550e668be577",
+  "version": "2.3.2"
+}
