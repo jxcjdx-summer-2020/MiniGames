@@ -1,0 +1,153 @@
+2020-08-18T06:19:58.298Z - normal: Load ~/.CocosCreator/settings.json
+2020-08-18T06:19:58.407Z - normal: Initializing Asset Database
+2020-08-18T06:19:58.412Z - normal: checking language setting...
+2020-08-18T06:19:58.412Z - normal: Language: zh
+2020-08-18T06:19:59.946Z - success: preview server running at http://localhost:7456
+2020-08-18T06:19:59.954Z - success: protocol editor-framework registered
+2020-08-18T06:19:59.955Z - success: protocol app registered
+2020-08-18T06:19:59.955Z - success: protocol theme registered
+2020-08-18T06:19:59.955Z - success: protocol packages registered
+2020-08-18T06:19:59.955Z - success: protocol uuid registerred
+2020-08-18T06:19:59.955Z - success: protocol db registerred
+2020-08-18T06:19:59.955Z - success: protocol thumbnail registerred
+2020-08-18T06:19:59.955Z - success: protocol unpack registerred
+2020-08-18T06:19:59.956Z - success: protocol disable-commonjs registerred
+2020-08-18T06:20:00.352Z - normal: connected!
+2020-08-18T06:20:00.353Z - normal: Check project D:\zhongzhi\Github\GamePlane_1
+2020-08-18T06:20:00.354Z - normal: Initializing project D:\zhongzhi\Github\GamePlane_1
+2020-08-18T06:20:00.383Z - success: adapters loaded
+2020-08-18T06:20:00.386Z - success: asset-db-debugger loaded
+2020-08-18T06:20:00.480Z - success: fb-audience-network loaded
+2020-08-18T06:20:00.513Z - success: fb-live-stream loaded
+2020-08-18T06:20:00.517Z - success: google-play-instant loaded
+2020-08-18T06:20:00.518Z - success: huawei-adapter loaded
+2020-08-18T06:20:00.519Z - success: jkw-adapter loaded
+2020-08-18T06:20:00.519Z - success: jsb-adapter loaded
+2020-08-18T06:20:00.520Z - success: oppo-adapter loaded
+2020-08-18T06:20:00.523Z - success: package-manager loaded
+2020-08-18T06:20:00.524Z - success: qtt-adapter loaded
+2020-08-18T06:20:00.528Z - success: runtime-dev-tools loaded
+2020-08-18T06:20:00.536Z - success: sdkbox loaded
+2020-08-18T06:20:00.540Z - success: ui-kit-preview-extra loaded
+2020-08-18T06:20:00.543Z - success: ui-kit-preview loaded
+2020-08-18T06:20:00.545Z - success: vivo-adapter loaded
+2020-08-18T06:20:00.618Z - success: alipay-minigame loaded
+2020-08-18T06:20:00.672Z - success: assets loaded
+2020-08-18T06:20:00.675Z - success: baidugame-opendata loaded
+2020-08-18T06:20:00.677Z - success: baidugame loaded
+2020-08-18T06:20:00.681Z - success: builder loaded
+2020-08-18T06:20:00.926Z - success: cocos-services loaded
+2020-08-18T06:20:00.932Z - success: console loaded
+2020-08-18T06:20:00.935Z - success: curve-editor loaded
+2020-08-18T06:20:00.949Z - success: fb-instant-games loaded
+2020-08-18T06:20:00.951Z - success: game-window loaded
+2020-08-18T06:20:00.953Z - success: google-instant-games loaded
+2020-08-18T06:20:00.956Z - success: hierarchy loaded
+2020-08-18T06:20:00.961Z - success: huawei-runtime loaded
+2020-08-18T06:20:00.963Z - success: inspector loaded
+2020-08-18T06:20:01.067Z - success: cpk-publish loaded
+2020-08-18T06:20:01.067Z - success: keystore loaded
+2020-08-18T06:20:01.072Z - success: node-library loaded
+2020-08-18T06:20:01.072Z - success: open-recent-items loaded
+2020-08-18T06:20:01.076Z - success: oppo-runtime loaded
+2020-08-18T06:20:01.079Z - success: package-asset loaded
+2020-08-18T06:20:01.081Z - success: preferences loaded
+2020-08-18T06:20:01.082Z - success: project-importer loaded
+2020-08-18T06:20:01.084Z - success: project-settings loaded
+2020-08-18T06:20:01.099Z - success: qtt-runtime loaded
+2020-08-18T06:20:01.102Z - success: scene loaded
+2020-08-18T06:20:01.103Z - success: simulator-debugger loaded
+2020-08-18T06:20:01.103Z - success: sprite-editor loaded
+2020-08-18T06:20:01.105Z - success: store loaded
+2020-08-18T06:20:01.108Z - success: timeline loaded
+2020-08-18T06:20:01.114Z - success: vivo-runtime loaded
+2020-08-18T06:20:01.117Z - success: wechatgame-opendata loaded
+2020-08-18T06:20:01.121Z - success: wechatgame loaded
+2020-08-18T06:20:01.126Z - success: xiaomi-runtime loaded
+2020-08-18T06:20:02.930Z - normal: Initializing Cocos2d
+2020-08-18T06:20:03.713Z - normal: Initializing engine extends
+2020-08-18T06:20:05.432Z - info: Cocos Service load base data!
+2020-08-18T06:20:05.718Z - normal: Loading packages
+2020-08-18T06:20:05.725Z - normal: Watching packages
+2020-08-18T06:20:05.741Z - normal: Run Application
+2020-08-18T06:20:12.032Z - warn: Please change the definition of property 'audio_reStart' in class 'NewClass'. Starting from v1.10,
+properties in CCClass can not be abbreviated if they are of type RawAsset.
+Please use the complete form.
+For example, if the type is Texture2D, the previous definition is:
+    audio_reStart: cc.Texture2D,
+If you use JS, it should be changed to:
+    audio_reStart: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+      default: null,     // object's default value is null
+    },
+If you use TS, it should be changed to:
+    %s: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+    }
+    %s: cc.Texture2D = null;
+(This helps us to successfully refactor all RawAssets at v2.0, sorry for the inconvenience. 😰 )
+2020-08-18T06:20:12.033Z - warn: Please change the definition of property 'audio_blowup' in class 'Enemy'. Starting from v1.10,
+properties in CCClass can not be abbreviated if they are of type RawAsset.
+Please use the complete form.
+For example, if the type is Texture2D, the previous definition is:
+    audio_blowup: cc.Texture2D,
+If you use JS, it should be changed to:
+    audio_blowup: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+      default: null,     // object's default value is null
+    },
+If you use TS, it should be changed to:
+    %s: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+    }
+    %s: cc.Texture2D = null;
+(This helps us to successfully refactor all RawAssets at v2.0, sorry for the inconvenience. 😰 )
+2020-08-18T06:20:12.038Z - warn: Please change the definition of property 'audio_bullet' in class 'Hero'. Starting from v1.10,
+properties in CCClass can not be abbreviated if they are of type RawAsset.
+Please use the complete form.
+For example, if the type is Texture2D, the previous definition is:
+    audio_bullet: cc.Texture2D,
+If you use JS, it should be changed to:
+    audio_bullet: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+      default: null,     // object's default value is null
+    },
+If you use TS, it should be changed to:
+    %s: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+    }
+    %s: cc.Texture2D = null;
+(This helps us to successfully refactor all RawAssets at v2.0, sorry for the inconvenience. 😰 )
+2020-08-18T06:20:12.038Z - warn: Please change the definition of property 'audio_hero_blowup' in class 'Hero'. Starting from v1.10,
+properties in CCClass can not be abbreviated if they are of type RawAsset.
+Please use the complete form.
+For example, if the type is Texture2D, the previous definition is:
+    audio_hero_blowup: cc.Texture2D,
+If you use JS, it should be changed to:
+    audio_hero_blowup: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+      default: null,     // object's default value is null
+    },
+If you use TS, it should be changed to:
+    %s: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+    }
+    %s: cc.Texture2D = null;
+(This helps us to successfully refactor all RawAssets at v2.0, sorry for the inconvenience. 😰 )
+2020-08-18T06:20:12.041Z - warn: Please change the definition of property 'audio_btn_pressed' in class 'Start'. Starting from v1.10,
+properties in CCClass can not be abbreviated if they are of type RawAsset.
+Please use the complete form.
+For example, if the type is Texture2D, the previous definition is:
+    audio_btn_pressed: cc.Texture2D,
+If you use JS, it should be changed to:
+    audio_btn_pressed: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+      default: null,     // object's default value is null
+    },
+If you use TS, it should be changed to:
+    %s: {
+      type: cc.Texture2D // use 'type:' to define Texture2D object directly
+    }
+    %s: cc.Texture2D = null;
+(This helps us to successfully refactor all RawAssets at v2.0, sorry for the inconvenience. 😰 )
+2020-08-18T07:12:42.796Z - info: shutdown preview server
