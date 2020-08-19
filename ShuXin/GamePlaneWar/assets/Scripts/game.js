@@ -134,6 +134,11 @@ cc.Class({
         this.tran=X;
     },
     gameOver(){
+        cc.sys.localStorage.setItem("AIR_PLANE_LAST_SCORE", this.Score);
+        var maxScore = cc.sys.localStorage.getItem("AIR_PLANE_MAX_SCORE") || 0;
+        if (maxScore < this.Score) {
+            cc.sys.localStorage.setItem("AIR_PLANE_MAX_SCORE", this.Score);
+        }
         cc.director.loadScene('end')
     }
 
