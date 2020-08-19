@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "enemyplane2",
+    "_name": "blast",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -21,16 +21,10 @@
     "_components": [
       {
         "__id__": 2
-      },
-      {
-        "__id__": 3
-      },
-      {
-        "__id__": 4
       }
     ],
     "_prefab": {
-      "__id__": 5
+      "__id__": 3
     },
     "_opacity": 255,
     "_color": {
@@ -42,8 +36,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 148,
-      "height": 73
+      "width": 127,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -75,8 +69,8 @@
     "_skewX": 0,
     "_skewY": 0,
     "_is3DNode": false,
-    "_groupIndex": 1,
-    "groupIndex": 1,
+    "_groupIndex": 0,
+    "groupIndex": 0,
     "_id": ""
   },
   {
@@ -95,7 +89,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "eaf3e6b1-7695-40bd-8f72-58e53e14ad60"
+      "__uuid__": "45686db2-9d06-4fc7-ad61-527684a7156f"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -112,46 +106,14 @@
     "_id": ""
   },
   {
-    "__type__": "46bacB7X+9OM5pxQ/q+yMjL",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "pickRadius": 60,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.BoxCollider",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "tag": 0,
-    "_offset": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_size": {
-      "__type__": "cc.Size",
-      "width": 148,
-      "height": 73
-    },
-    "_id": ""
-  },
-  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "5863fc32-9809-4537-8ae3-416f01082b13"
+      "__id__": 0
     },
-    "fileId": "96gvKv3+5KL41fiM+6AJrc",
+    "fileId": "37Fjx0BdlIUYud6YgPdHhL",
     "sync": false
   }
 ]

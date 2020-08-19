@@ -12,13 +12,18 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        collider: cc.BoxCollider
+        collider: cc.BoxCollider,
+        shootAudio: {
+            default: null,
+            type: cc.AudioClip
+        },
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         cc.director.getCollisionManager().enabled = true;
+        
       
     },
 
@@ -26,16 +31,17 @@ cc.Class({
         this.node.runAction(this.BulletMove())
 
         if(Math.round(this.node.y)>=(320-this.bullet_he)){
-            this.game.newbullet();
+            
             this.node.destroy();
 
         }
        
-        
+       
        
 
 
     },
+    
     start:function(){
         
         // cc.director.getCollisionManager().enabledDebugDraw = true;
@@ -43,7 +49,8 @@ cc.Class({
 
     },
     onCollisionEnter: function (other, self) {
-       this.ondestroy()
+        cc.audioEngine.playEffect(this.shootAudio, false);
+        this.ondestroy()
    
 
     },
@@ -52,13 +59,10 @@ cc.Class({
         var up = cc.moveBy(80, cc.v2(0, 320-this.bullet_he)).easing(cc.easeCubicActionOut());
         return up;
     },
-    getposition:function(){
-        var x=this.node.x;
-        return x;
-    },
+    
     ondestroy:function(){
         this.node.destroy();
-    }
+    },
     
 
     // update (dt) {},

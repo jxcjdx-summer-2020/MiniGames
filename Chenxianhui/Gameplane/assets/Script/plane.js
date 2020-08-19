@@ -15,7 +15,13 @@ cc.Class({
             
         case cc.macro.KEY.d:
             this.accRight = true;
-            break;      
+            break; 
+        case cc.macro.KEY.w:
+            this.accUp = true;
+            break;
+        case cc.macro.KEY.s:
+            this.accDown = true;
+            break;     
     }
 },
 
@@ -29,6 +35,12 @@ onKeyUp (event) {
         case cc.macro.KEY.d:
             this.accRight = false;
             break;
+        case cc.macro.KEY.w:
+            this.accUp = false;
+            break;
+        case cc.macro.KEY.s:
+            this.accDown = false;
+            break;
         
     }
 },
@@ -36,7 +48,9 @@ onKeyUp (event) {
     onLoad: function () {
         this.accLeft = false;
         this.accRight = false;
-      
+        this.accUp=false;
+        this.accDown = false;
+        cc.director.getCollisionManager().enabled = true;
         // 初始化键盘输入监听
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);   
@@ -48,17 +62,49 @@ onKeyUp (event) {
     },
     // called every frame
     update: function (dt) {
+        this.he=this.node.height/2;
+        if(this.node.y>=(320-this.he)){
+            this.accUp=false
+        }
+        if(this.node.y<=(-320+this.he)){
+            this.accDown=false
+        }
+        if(this.node.x<=(-480+this.length) ){
+            this.accLeft=false;
+
+        }
+        if( this.node.x>=(480-this.length)){
+            this.accRight=false;
+        }
+
+
+
         if(this.accLeft){
             this.node.x-=5
         }
         if(this.accRight){
             this.node.x+=5
         }
-        this.length=this.length=this.node.width/2
-        if(this.node.x<=(-480+this.length) || this.node.x>=(480-this.length)){
-            this.node.x=-this.node.x
-
+        if(this.accUp){
+            this.node.y+=5;
         }
+        if(this.accDown){
+            this.node.y-=5;
+        }
+        this.length=this.node.width/2
+        
+      
+
 
     },
+    gameOver: function () {
+      
+        this.node.stopAllActions(); //停止 player 节点的跳跃动作
+        cc.director.loadScene('StartGame');
+    },
+    onCollisionEnter: function(other,self){
+       this.gameOver()
+
+    }
+
 });

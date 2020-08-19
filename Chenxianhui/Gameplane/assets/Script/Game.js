@@ -4,6 +4,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+//导入模块
 
 cc.Class({
     extends: cc.Component,
@@ -18,6 +19,10 @@ cc.Class({
         default: null,
         type: cc.Prefab
       },
+      bossPrefab: {
+        default: null,
+        type: cc.Prefab
+      },
     plane: {
         default: null,
         type: cc.Node
@@ -26,7 +31,13 @@ cc.Class({
         default: null,
         type: cc.Label
     },
-    score:0
+    HeighestscoreDisplay: {
+        default: null,
+        type: cc.Label
+    },
+    score:0,
+    gamenode:0,
+  
     },
     onKeyDown (event) {
         // set a flag when key pressed
@@ -55,6 +66,9 @@ cc.Class({
         // 初始化键盘输入监听
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);   
+        this.gamenode=this.node
+        
+        
     },
     onDestroy() {
         // 取消键盘输入监听
@@ -64,13 +78,7 @@ cc.Class({
 
     update: function (dt) {
        
-        // if (this.getBulletDistance() < this.pickRadius) {
-        //     // 调用收集行为
-        //     this.onenemydestroy();
-        //     return;
-        // }
-        
-
+    
 
     },
 
@@ -107,15 +115,32 @@ cc.Class({
         var y=320;
         return cc.v2(x,y)
     },
+
+    newboss:function(){
+        this.new_boss=cc.instantiate(this.bossPrefab);
+        this.node.addChild(this.new_boss);
+        this.new_boss.setPosition(this.getNewBossPosition());
+        this.new_boss.getComponent('Boss').game = this;
+    },
+    getNewBossPosition:function(){
+        var boss_wid=this.bossPrefab.width/2;
+        var enemy_he=this.bossPrefab.height/2;
+        var x=  Math.random()*940-480;
+        var y=320;
+        return cc.v2(x,y)
+    },
     start:function(){
         this.newenemy()
          this.schedule(this.newenemy,2)
          this.newbullet()
-         this.schedule(this.newbullet,1)
+         this.schedule(this.newbullet,0.7)
+         this.schedule(this.newboss,5,0)
         
          
     },
-   
+   returnnode:function(){
+       return this.node;
+   }
    
     
 

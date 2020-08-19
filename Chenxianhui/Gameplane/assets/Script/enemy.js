@@ -12,9 +12,17 @@ cc.Class({
     properties: {
         // 之间的距离小于这个数值时，就会完成收集
         pickRadius: 0,
+        blastPrefab: {
+            default: null,
+            type: cc.Prefab
+          },
     },
     onLoad:function(){
+        this.heightScore=0
         
+        if(localStorage.getItem("height")){
+            this.heightScore=localStorage.getItem("height");
+        }
         cc.director.getCollisionManager().enabled = true;
     },
    
@@ -31,7 +39,11 @@ cc.Class({
             this.onPicked();
             return;
         }
-       
+
+        if(this.heightScore<this.game.score){
+            this.heightScore=this.game.score;
+        }
+        this.game.HeighestscoreDisplay.string = '最高分数为: ' + this.heightScore;
 
 
     },
@@ -54,6 +66,7 @@ cc.Class({
         this.gameOver()
     },
     gameOver: function () {
+        localStorage.setItem("height",this.heightScore)
         this.game.plane.stopAllActions(); //停止 player 节点的跳跃动作
         cc.director.loadScene('StartGame');
     },
@@ -64,16 +77,40 @@ cc.Class({
     
     ondestroy:function(){
         this.node.destroy();
+        this.newblast()
+       
+       
+        
     },
     gainscore:function(){
         this.game.score+=5;
         this.game.scoreDisplay.string = 'Score: ' + this.game.score;
 
-    }
+    },
+    newblast:function(){
+        var new_blast=cc.instantiate(this.blastPrefab);
+    this.game.node.addChild(new_blast);
+     new_blast.setPosition(this.getNewblastPosition());
+    setTimeout(()=>{
+        // this.game.node.removeChild(this.new_blast)
+        new_blast.destroy();
+      
+    },100)
+        
+    },
+    getNewblastPosition:function(){
+        var x=this.node.x;
+        var y=this.node.y
+        return cc.v2(x,y)
+    },
 
 
 
-    
+
+
+
 });
+
+
 
 

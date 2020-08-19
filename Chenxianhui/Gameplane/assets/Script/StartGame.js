@@ -18,10 +18,7 @@ cc.Class({
 
     
 
-    start () {
-
-    },
-
+   
     Onclick_game:function(){
         //防止按了多次
         if(this.start){
