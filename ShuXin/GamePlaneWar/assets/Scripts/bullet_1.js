@@ -25,7 +25,8 @@ cc.Class({
         if(this.node.y>470)
             this.node.destroy();
     },
-    onCollisionEnter:function(other,self){              
+    onCollisionEnter:function(other,self){  
+                   
         if(other.node.group == 'enemy') 
         {
             var X=other.node.x;
@@ -44,5 +45,6 @@ cc.Class({
             this.game.addBuff(X,Y);
             this.game.addScore();
         }
+
     },
 });
