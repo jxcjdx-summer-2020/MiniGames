@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "mplane",
+    "texture": "c09656fe-f725-4fb9-ad75-3b2b943a6f99",
+    "atlas": "",
+    "rect": [
+      6,
+      0,
+      94,
+      110
+    ],
+    "offset": [
+      3,
+      0
+    ],
+    "originalSize": [
+      100,
+      110
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}
