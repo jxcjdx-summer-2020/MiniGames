@@ -11,7 +11,7 @@
   "height": 33,
   "platformSettings": {},
   "subMetas": {
-    "body": {
+    "SnakeBody": {
       "ver": "1.0.4",
       "uuid": "0a7d7b61-15b5-4891-8085-d3b1bdb27eed",
       "rawTextureUuid": "b3cf695d-0582-4f08-bcde-540f4a6e5aac",
