@@ -164,7 +164,7 @@
     "meta": 1597575702797,
     "relativePath": "scripts\\Player.js"
   },
-   "430eccbf-bf2c-4e6e-8c0c-884bbb487f32": {
+    "430eccbf-bf2c-4e6e-8c0c-884bbb487f32": {
     "asset": 1597201091083,
     "meta": 1597576090524,
     "relativePath": "effects\\__builtin-editor-gizmo-line.effect"
@@ -308,6 +308,11 @@
     "asset": 1597201091128,
     "meta": 1597576090805,
     "relativePath": "model\\prefab\\cone.prefab"
+  },
+  "2be36297-9abb-4fee-8049-9ed5e271da8a": {
+    "asset": 1597201091123,
+    "meta": 1597576090807,
+    "relativePath": "misc\\default_video.mp4"
   },
   "1c5e4038-953a-44c2-b620-0bbfc6170477": {
     "asset": 1597201091129,
@@ -489,6 +494,11 @@
     "meta": 1597576090977,
     "relativePath": "prefab\\videoplayer.prefab"
   },
+  "8c5001fd-07ee-4a4b-a8a0-63e15195e94d": {
+    "asset": 1597201091177,
+    "meta": 1597576090980,
+    "relativePath": "prefab\\webview.prefab"
+  },
   "144c3297-af63-49e8-b8ef-1cfa29b3be28": {
     "asset": 1597201091180,
     "meta": 1597576090991,
@@ -524,6 +534,11 @@
     "meta": 1597576091171,
     "relativePath": "resources\\effects\\builtin-unlit.effect"
   },
+  "6f801092-0c37-4f30-89ef-c8d960825b36": {
+    "asset": 1597201343942,
+    "meta": 1597576091252,
+    "relativePath": "resources\\materials\\builtin-2d-base.mtl"
+  },
   "3a7bb79f-32fd-422e-ada2-96f518fed422": {
     "asset": 1597201343943,
     "meta": 1597576091253,
@@ -538,6 +553,11 @@
     "asset": 1597201343950,
     "meta": 1597576091254,
     "relativePath": "resources\\materials\\builtin-2d-sprite.mtl"
+  },
+  "432fa09c-cf03-4cff-a186-982604408a07": {
+    "asset": 1597201091194,
+    "meta": 1597576091255,
+    "relativePath": "resources\\materials\\builtin-3d-particle.mtl"
   },
   "466d4f9b-e5f4-4ea8-85d5-3c6e9a65658a": {
     "asset": 1597201091196,
