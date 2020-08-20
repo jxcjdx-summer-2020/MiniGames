@@ -6,6 +6,7 @@ cc.Class({
         snakeHead: cc.Prefab,
         snakeBody: cc.Prefab,
         wall: cc.Prefab,
+        apple: cc.Prefab,
     },
 
     /**
@@ -19,6 +20,8 @@ cc.Class({
             return this.snakeBody;
         } else if (prefabName == "Wall") {
             return this.wall;
+        } else if (prefabName == "Apple") {
+            return this.apple;
         }
     },
 

@@ -10,6 +10,8 @@ const Direction = cc.Enum({
     Right: 2,
     Up: 3
 });
+// 方向组合
+
 // 蛇的速度（单位：s）
 const Snake_Origin_Speed = 0.3
 
