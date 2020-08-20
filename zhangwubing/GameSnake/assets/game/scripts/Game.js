@@ -5,6 +5,7 @@ cc.Class({
 
     properties: {
         snakeNode: cc.Node,
+        wallNode: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -12,14 +13,26 @@ cc.Class({
     onLoad() {
         this.initData();
         this.initUI(1);
+        
     },
 
     start() {
+        this.onEvent();
+        this.driverSanke(Enum.Snake_Origin_Speed);
+    },
+
+    onEvent() {
+        this.offEvent();
+        this.node.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp.bind(this), this);
+    },
+
+    offEvent() {
 
     },
 
     initData() {
         this._snakes = [];
+        this._walls = [];
     },
 
     initUI(level) {
@@ -31,19 +44,50 @@ cc.Class({
     },
 
     initUI_1() {
-        this.initSnake(3);
+        // 蛇本体
+        this.initSnake(0, 0, Enum.Direction.Left, 4);
+        // 地图
+        var wallPos = [];
+        for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
+            for (let j = -1 * Enum.Design_Cell_Height; j <= Enum.Design_Cell_Height; j++) {
+                if (i == -1 * Enum.Design_Cell_Width || i == Enum.Design_Cell_Width || j == -1 * Enum.Design_Cell_Height || j == Enum.Design_Cell_Height) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+            }
+        }
+        this.initMap(wallPos);
     },
 
-    initSnake(initBodyLength) {
-        // 头部初始化
-        app.prefabMgr.getPrefabByName("SnakeHead", (prefab) => {
-            var headNode = cc.instantiate(prefab);
-            headNode.parent = this.snakeNode;
-            this._head = headNode.getComponent("SnakeHead").init(0, 0, Enum.Direction.Left);
-            this._snakes.push(this._head);
-            // 身体初始化
-            this.buildBody(initBodyLength);
+    initMap(wallCellPosArray) {
+        if (wallCellPosArray == null || wallCellPosArray.length == 0) {
+            return;
+        }
+        wallCellPosArray.forEach(element => {
+            let { posX, posY } = element;
+            var prefab = app.prefabMgr.getPrefabByName("Wall");
+            var wallNode = cc.instantiate(prefab);
+            wallNode.parent = this.wallNode;
+            let _wall = wallNode.getComponent("Wall").init(posX, posY);
+            this._walls.push(_wall);
         });
+    },
+
+    /**
+     * 
+     * @param {*} headPosX 
+     * @param {*} headPosY 
+     * @param {*} headDir 
+     * @param {*} totalLength 
+     */
+    initSnake(headPosX, headPosY, headDir, totalLength) {
+        // 头部初始化
+        var prefab = app.prefabMgr.getPrefabByName("SnakeHead");
+        var headNode = cc.instantiate(prefab);
+        headNode.parent = this.snakeNode;
+        this._head = headNode.getComponent("SnakeHead").init(headPosX, headPosY, headDir);
+        this._snakes.push(this._head);
+        // 身体初始化
+        this.buildBody(totalLength - 1);
     },
 
     buildBody(size) {
@@ -52,16 +96,39 @@ cc.Class({
             return;
         }
         for (let i = 0; i < size; i++) {
-            app.prefabMgr.getPrefabByName("SnakeBody", (prefab) => {
-                let bodyNode = cc.instantiate(prefab);
-                bodyNode.parent = this.snakeNode;
-                var _lastBody = this.getLastBody();
-                let { posX, posY } = this.getNextCellPosByNode(_lastBody, false);
-                let lastDir = _lastBody.getDirection();
-                var _body = bodyNode.getComponent("SnakeBody").init(posX, posY, lastDir);
-                this._snakes.push(_body);
-            });
+            var prefab = app.prefabMgr.getPrefabByName("SnakeBody");
+            let bodyNode = cc.instantiate(prefab);
+            bodyNode.parent = this.snakeNode;
+            let _lastBody = this.getLastBody();
+            let { posX, posY } = this.getNextCellPosByNode(_lastBody, false);
+            let lastDir = _lastBody.getDirection();
+            var _body = bodyNode.getComponent("SnakeBody").init(posX, posY, lastDir, _lastBody);
+            this._snakes.push(_body);
         }
+    },
+
+    driverSanke(speed) {
+        this.speed = speed;
+        this.unschedule(this.snakeTimer.bind(this));
+        this.schedule(this.snakeTimer.bind(this), this.speed);
+        this.snakeTimer();
+    },
+
+    snakeTimer() {
+        // 渲染身体
+        for (let i = this._snakes.length - 1; i > 0; i--) {
+            let _snake = this._snakes[i];
+            var _pre = _snake.getPreBody();
+            if (_pre != null) {
+                let { posX, posY } = _pre.getCellPosition();
+                let dir = _pre.getDirection();
+                _snake.init(posX, posY, dir, _pre);
+            }
+        }
+        // 渲染头
+        let { posX, posY } = this.getNextCellPosByNode(this._head, true);
+        let dir = this._head.getDirection();
+        this._head.init(posX, posY, dir);
     },
 
     getLastBody() {
@@ -91,5 +158,7 @@ cc.Class({
         }
     },
 
-    // update (dt) {},
+    onKeyUp(event) {
+        cc.log(event);
+    },
 });
