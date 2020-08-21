@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "enemyplane1",
+    "texture": "cc6a5d14-2e37-44d8-8ed3-4baeb50d13c2",
+    "atlas": "",
+    "rect": [
+      15,
+      6,
+      130,
+      92
+    ],
+    "offset": [
+      5,
+      -3
+    ],
+    "originalSize": [
+      150,
+      98
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

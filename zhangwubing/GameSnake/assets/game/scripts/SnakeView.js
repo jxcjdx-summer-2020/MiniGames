@@ -1,33 +1,41 @@
 const BaseView = require("BaseView");
+const Enum = require("Constant");
 
 cc.Class({
     extends: BaseView,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        _dir: Enum.Direction.Left,
+        dir: {
+            get: function () {
+                return this._dir;
+            },
+            set: function (v) {
+                if (v != Enum.Direction.Left && v != Enum.Direction.Down && v != Enum.Direction.Right && v != Enum.Direction.Up) {
+                    return;
+                }
+                this._dir = v;
+                this.node.angle = v * 90;
+            },
+        }
     },
 
-    // LIFE-CYCLE CALLBACKS:
+    getDirection() {
+        return this.dir;
+    },
 
-    // onLoad () {},
+    setDirection(dir) {
+        this.dir = dir;
+    },
 
     start () {
 
     },
+
+    init(posX, posY, dir) {
+        this._super(posX, posY);
+        this.dir = dir;
+    }, 
 
     // update (dt) {},
 });

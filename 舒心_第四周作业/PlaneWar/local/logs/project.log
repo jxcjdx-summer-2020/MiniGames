@@ -1,0 +1,354 @@
+2020-08-17T03:18:01.677Z - normal: Load ~/.CocosCreator/settings.json
+2020-08-17T03:18:01.736Z - normal: Initializing Asset Database
+2020-08-17T03:18:01.775Z - normal: checking language setting...
+2020-08-17T03:18:01.775Z - normal: Language: zh
+2020-08-17T03:18:03.203Z - success: preview server running at http://localhost:7456
+2020-08-17T03:18:03.209Z - success: protocol editor-framework registered
+2020-08-17T03:18:03.209Z - success: protocol app registered
+2020-08-17T03:18:03.209Z - success: protocol theme registered
+2020-08-17T03:18:03.209Z - success: protocol packages registered
+2020-08-17T03:18:03.209Z - success: protocol uuid registerred
+2020-08-17T03:18:03.209Z - success: protocol db registerred
+2020-08-17T03:18:03.209Z - success: protocol thumbnail registerred
+2020-08-17T03:18:03.210Z - success: protocol unpack registerred
+2020-08-17T03:18:03.210Z - success: protocol disable-commonjs registerred
+2020-08-17T03:18:03.388Z - normal: connected!
+2020-08-17T03:18:03.389Z - normal: Check project E:\workspace\projects\MiniGames\舒心_第四周作业\PlaneWar
+2020-08-17T03:18:03.391Z - normal: Initializing project E:\workspace\projects\MiniGames\舒心_第四周作业\PlaneWar
+2020-08-17T03:18:03.427Z - success: adapters loaded
+2020-08-17T03:18:03.428Z - success: asset-db-debugger loaded
+2020-08-17T03:18:03.574Z - success: fb-audience-network loaded
+2020-08-17T03:18:03.605Z - success: fb-live-stream loaded
+2020-08-17T03:18:03.609Z - success: google-play-instant loaded
+2020-08-17T03:18:03.610Z - success: huawei-adapter loaded
+2020-08-17T03:18:03.610Z - success: jkw-adapter loaded
+2020-08-17T03:18:03.610Z - success: jsb-adapter loaded
+2020-08-17T03:18:03.611Z - success: oppo-adapter loaded
+2020-08-17T03:18:03.612Z - success: package-manager loaded
+2020-08-17T03:18:03.613Z - success: qtt-adapter loaded
+2020-08-17T03:18:03.626Z - success: runtime-dev-tools loaded
+2020-08-17T03:18:03.642Z - success: sdkbox loaded
+2020-08-17T03:18:03.656Z - success: ui-kit-preview-extra loaded
+2020-08-17T03:18:03.658Z - success: ui-kit-preview loaded
+2020-08-17T03:18:03.658Z - success: vivo-adapter loaded
+2020-08-17T03:18:03.855Z - success: alipay-minigame loaded
+2020-08-17T03:18:03.897Z - success: assets loaded
+2020-08-17T03:18:03.901Z - success: baidugame-opendata loaded
+2020-08-17T03:18:03.904Z - success: baidugame loaded
+2020-08-17T03:18:03.907Z - success: builder loaded
+2020-08-17T03:18:04.219Z - success: cocos-services loaded
+2020-08-17T03:18:04.223Z - success: console loaded
+2020-08-17T03:18:04.225Z - success: curve-editor loaded
+2020-08-17T03:18:04.234Z - success: fb-instant-games loaded
+2020-08-17T03:18:04.241Z - success: game-window loaded
+2020-08-17T03:18:04.242Z - success: google-instant-games loaded
+2020-08-17T03:18:04.245Z - success: hierarchy loaded
+2020-08-17T03:18:04.248Z - success: huawei-runtime loaded
+2020-08-17T03:18:04.250Z - success: inspector loaded
+2020-08-17T03:18:04.321Z - success: cpk-publish loaded
+2020-08-17T03:18:04.322Z - success: keystore loaded
+2020-08-17T03:18:04.326Z - success: node-library loaded
+2020-08-17T03:18:04.327Z - success: open-recent-items loaded
+2020-08-17T03:18:04.329Z - success: oppo-runtime loaded
+2020-08-17T03:18:04.330Z - success: package-asset loaded
+2020-08-17T03:18:04.330Z - success: preferences loaded
+2020-08-17T03:18:04.332Z - success: project-importer loaded
+2020-08-17T03:18:04.332Z - success: project-settings loaded
+2020-08-17T03:18:04.345Z - success: qtt-runtime loaded
+2020-08-17T03:18:04.347Z - success: scene loaded
+2020-08-17T03:18:04.348Z - success: simulator-debugger loaded
+2020-08-17T03:18:04.348Z - success: sprite-editor loaded
+2020-08-17T03:18:04.350Z - success: store loaded
+2020-08-17T03:18:04.362Z - success: timeline loaded
+2020-08-17T03:18:04.365Z - success: vivo-runtime loaded
+2020-08-17T03:18:04.366Z - success: wechatgame-opendata loaded
+2020-08-17T03:18:04.380Z - success: wechatgame loaded
+2020-08-17T03:18:04.384Z - success: xiaomi-runtime loaded
+2020-08-17T03:18:05.665Z - normal: Initializing Cocos2d
+2020-08-17T03:18:06.006Z - normal: Initializing engine extends
+2020-08-17T03:18:06.760Z - info: Cocos Service load base data!
+2020-08-17T03:18:10.802Z - normal: Loading packages
+2020-08-17T03:18:10.806Z - normal: Watching packages
+2020-08-17T03:18:10.838Z - normal: Run Application
+2020-08-17T03:19:46.608Z - normal: Start building with options : {
+  "actualPlatform": "web-desktop",
+  "android": {
+    "packageName": ""
+  },
+  "android-instant": {
+    "REMOTE_SERVER_ROOT": "",
+    "host": "",
+    "packageName": "",
+    "pathPattern": "",
+    "recordPath": "",
+    "scheme": "https",
+    "skipRecord": false
+  },
+  "apiLevel": "",
+  "appABIs": [],
+  "appBundle": false,
+  "buildPath": "E:\\workspace\\projects\\MiniGames\\ShuXinAirPlaneGame",
+  "buildScriptsOnly": false,
+  "debug": false,
+  "dest": "E:\\workspace\\projects\\MiniGames\\ShuXinAirPlaneGame\\web-desktop",
+  "embedWebDebugger": false,
+  "encryptJs": true,
+  "excludeScenes": [],
+  "excludedModules": [
+    "3D Physics/Builtin"
+  ],
+  "fb-instant-games": {},
+  "includeSDKBox": false,
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "ios": {
+    "packageName": ""
+  },
+  "mac": {
+    "packageName": ""
+  },
+  "md5Cache": false,
+  "mergeStartScene": false,
+  "optimizeHotUpdate": false,
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "packageName": "",
+  "platform": "web-desktop",
+  "previewHeight": 960,
+  "previewWidth": 640,
+  "scenes": [
+    "3ebe541a-c347-459b-8b85-9ce473ec7736",
+    "a49cec5d-eff3-40e3-970d-f56cf2217a59"
+  ],
+  "sourceMaps": false,
+  "startScene": "3ebe541a-c347-459b-8b85-9ce473ec7736",
+  "template": "link",
+  "title": "PlaneWar",
+  "useDebugKeystore": true,
+  "vsVersion": "auto",
+  "webOrientation": "auto",
+  "win32": {},
+  "xxteaKey": "189f5503-5bcd-41",
+  "zipCompressJs": true,
+  "project": "E:\\workspace\\projects\\MiniGames\\舒心_第四周作业\\PlaneWar",
+  "projectName": "PlaneWar",
+  "debugBuildWorker": false
+}
+2020-08-17T03:19:46.609Z - normal: Building E:\workspace\projects\MiniGames\舒心_第四周作业\PlaneWar
+2020-08-17T03:19:46.609Z - normal: Destination E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\web-desktop
+2020-08-17T03:19:46.674Z - normal: Delete E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\web-desktop\subpackages/**/*,E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\web-desktop\**\*
+2020-08-17T03:19:46.679Z - normal: Building 3D physics modules...
+2020-08-17T03:20:33.661Z - normal: Start building assets
+2020-08-17T03:20:33.661Z - normal: Start spawn build-worker
+2020-08-17T03:20:34.243Z - normal: Finish spawn build-worker
+2020-08-17T03:20:34.243Z - normal: Start init build-worker
+2020-08-17T03:20:35.768Z - normal: Finish init build-worker
+2020-08-17T03:20:35.769Z - normal: Start build-assets in worker
+2020-08-17T03:20:36.121Z - normal: Finish build-assets in worker
+2020-08-17T03:20:36.132Z - normal: Finish building assets
+2020-08-17T03:20:36.132Z - normal: Start building plugin scripts
+2020-08-17T03:20:36.193Z - normal: Generating main.js from E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\static\build-templates\shares\main.js
+2020-08-17T03:20:36.205Z - normal: Generating html from E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\static\build-templates\web-desktop\template\index.html
+2020-08-17T03:20:36.269Z - normal: Built to "E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\web-desktop" successfully
+2020-08-17T03:22:52.927Z - normal: Start building with options : {
+  "actualPlatform": "wechatgame",
+  "android": {
+    "packageName": ""
+  },
+  "android-instant": {
+    "REMOTE_SERVER_ROOT": "",
+    "host": "",
+    "packageName": "",
+    "pathPattern": "",
+    "recordPath": "",
+    "scheme": "https",
+    "skipRecord": false
+  },
+  "apiLevel": "",
+  "appABIs": [],
+  "appBundle": false,
+  "buildPath": "E:\\workspace\\projects\\MiniGames\\ShuXinAirPlaneGame",
+  "buildScriptsOnly": false,
+  "debug": false,
+  "dest": "E:\\workspace\\projects\\MiniGames\\ShuXinAirPlaneGame\\wechatgame",
+  "embedWebDebugger": false,
+  "encryptJs": true,
+  "excludeScenes": [],
+  "excludedModules": [
+    "3D Physics/Builtin"
+  ],
+  "fb-instant-games": {},
+  "includeSDKBox": false,
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "ios": {
+    "packageName": ""
+  },
+  "mac": {
+    "packageName": ""
+  },
+  "md5Cache": false,
+  "mergeStartScene": false,
+  "optimizeHotUpdate": false,
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "packageName": "",
+  "platform": "mini-game",
+  "previewHeight": 960,
+  "previewWidth": 640,
+  "scenes": [
+    "a49cec5d-eff3-40e3-970d-f56cf2217a59",
+    "3ebe541a-c347-459b-8b85-9ce473ec7736"
+  ],
+  "sourceMaps": false,
+  "startScene": "a49cec5d-eff3-40e3-970d-f56cf2217a59",
+  "template": "link",
+  "title": "PlaneWar",
+  "useDebugKeystore": true,
+  "vsVersion": "auto",
+  "webOrientation": "auto",
+  "win32": {},
+  "xxteaKey": "189f5503-5bcd-41",
+  "zipCompressJs": true,
+  "project": "E:\\workspace\\projects\\MiniGames\\舒心_第四周作业\\PlaneWar",
+  "projectName": "PlaneWar",
+  "debugBuildWorker": false
+}
+2020-08-17T03:22:52.928Z - normal: Building E:\workspace\projects\MiniGames\舒心_第四周作业\PlaneWar
+2020-08-17T03:22:52.928Z - normal: Destination E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\wechatgame
+2020-08-17T03:22:52.928Z - normal: Delete E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\wechatgame\**\*,!E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\wechatgame\game.json,!E:\workspace\projects\MiniGames\ShuXinAirPlaneGame\wechatgame\project.config.json
+2020-08-17T03:22:52.933Z - normal: Building 3D physics modules...
+2020-08-17T03:23:43.987Z - normal: Start building assets
+2020-08-17T03:23:43.987Z - normal: Start spawn build-worker
+2020-08-17T03:23:44.610Z - normal: Finish spawn build-worker
+2020-08-17T03:23:44.610Z - normal: Start init build-worker
+2020-08-17T03:23:46.234Z - normal: Finish init build-worker
+2020-08-17T03:23:46.234Z - normal: Start build-assets in worker
+2020-08-17T03:23:46.585Z - normal: Finish build-assets in worker
+2020-08-17T03:23:46.596Z - normal: Finish building assets
+2020-08-17T03:23:46.596Z - normal: Start building plugin scripts
+2020-08-17T03:23:50.231Z - normal: Built wechatgame successfully
+2020-08-17T03:24:21.165Z - error: - initialize
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:28.520Z - error: √ IDE server started successfully, listening on http://127.0.0.1:40423
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:28.521Z - error: - open IDE
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:43.666Z - error: - initialize
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:43.704Z - error: √ IDE server has started, listening on http://127.0.0.1:40423
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:43.705Z - error: - open IDE
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:43.952Z - error: × open IDE
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:43.952Z - normal: [error] Error: read ECONNRESET
+
+2020-08-17T03:24:43.953Z - error: × open IDE
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:24:43.953Z - normal: [error] Error: read ECONNRESET
+
+2020-08-17T03:25:11.074Z - error: - initialize
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T03:25:18.622Z - error: √ IDE server started successfully, listening on http://127.0.0.1:54901
+- open IDE
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T04:41:41.150Z - error: × open IDE
+
+
+    at Socket.<anonymous> (E:\workspace\CocosDashboard\resources\.editors\Creator\2.3.2\resources\app.asar\editor\builtin\wechatgame\utils\wechat-game.js:1:774)
+    at Socket.emit (events.js:194:13)
+    at Socket.EventEmitter.emit (domain.js:469:20)
+    at addChunk (_stream_readable.js:296:12)
+    at readableAddChunk (_stream_readable.js:277:11)
+    at Socket.Readable.push (_stream_readable.js:232:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:165:17)
+2020-08-17T04:41:41.151Z - normal: [error] Error: socket hang up
+
+2020-08-18T03:04:22.537Z - info: shutdown preview server

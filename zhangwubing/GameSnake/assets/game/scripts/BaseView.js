@@ -11,7 +11,7 @@ cc.Class({
             },
             set: function (value) {
                 this._posX = value;
-                this.node.x = 30 * value;
+                this.node.x = Enum.Design_Cell_Size * value;
             },
         },
         _posY: 0,
@@ -21,9 +21,14 @@ cc.Class({
             },
             set: function (value) {
                 this._posY = value;
-                this.node.y = 30 * value;
+                this.node.y = Enum.Design_Cell_Size * value;
             },
         }
+    },
+
+    init(posX, posY) {
+        this.posX = posX;
+        this.posY = posY;
     },
 
     getCellPosition() {
