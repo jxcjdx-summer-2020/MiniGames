@@ -62,7 +62,7 @@ cc.Class({
         }
         this.initMap(wallPos);
         // 苹果
-        this.initApple(10);
+        this.initApple(1);
     },
 
     initApple(size) {
@@ -249,6 +249,18 @@ cc.Class({
         if (currentDir == Enum.Direction.Down && targetDir == Enum.Direction.Up) {
             return false;
         }
+        if (currentDir == Enum.Direction.Left && targetDir == Enum.Direction.Left) {
+            return false;
+        }
+        if (currentDir == Enum.Direction.Right && targetDir == Enum.Direction.Right) {
+            return false;
+        }
+        if (currentDir == Enum.Direction.Up && targetDir == Enum.Direction.Up) {
+            return false;
+        }
+        if (currentDir == Enum.Direction.Down && targetDir == Enum.Direction.Down) {
+            return false;
+        }
         return true;
     },
 
@@ -281,22 +293,22 @@ cc.Class({
 
     onKeyUp(event) {
         switch (event.keyCode) {
-            case cc.macro.KEY.a:
-                // 记录当前方向
-                this.current_dir = Enum.Direction.Left;
-                break;
-            case cc.macro.KEY.w:
-                // 记录当前方向
-                this.current_dir = Enum.Direction.Up;
-                break;
-            case cc.macro.KEY.d:
-                // 记录当前方向
-                this.current_dir = Enum.Direction.Right;
-                break;
-            case cc.macro.KEY.s:
-                // 记录当前方向
-                this.current_dir = Enum.Direction.Down;
-                break;
+            // case cc.macro.KEY.a:
+            //     // 记录当前方向
+            //     this.current_dir = Enum.Direction.Left;
+            //     break;
+            // case cc.macro.KEY.w:
+            //     // 记录当前方向
+            //     this.current_dir = Enum.Direction.Up;
+            //     break;
+            // case cc.macro.KEY.d:
+            //     // 记录当前方向
+            //     this.current_dir = Enum.Direction.Right;
+            //     break;
+            // case cc.macro.KEY.s:
+            //     // 记录当前方向
+            //     this.current_dir = Enum.Direction.Down;
+            //     break;
         }
     },
 
@@ -305,6 +317,22 @@ cc.Class({
             case cc.macro.KEY.e:
                 // 加速
                 break;
+                case cc.macro.KEY.a:
+                    // 记录当前方向
+                    this.current_dir = Enum.Direction.Left;
+                    break;
+                case cc.macro.KEY.w:
+                    // 记录当前方向
+                    this.current_dir = Enum.Direction.Up;
+                    break;
+                case cc.macro.KEY.d:
+                    // 记录当前方向
+                    this.current_dir = Enum.Direction.Right;
+                    break;
+                case cc.macro.KEY.s:
+                    // 记录当前方向
+                    this.current_dir = Enum.Direction.Down;
+                    break;
         }
     },
 });
