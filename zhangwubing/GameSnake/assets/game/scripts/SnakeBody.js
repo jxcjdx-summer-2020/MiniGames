@@ -15,9 +15,10 @@ cc.Class({
 
     },
 
-    init(posX, posY, dir, pre) {
+    init(posX, posY, dir, pre, hide) {
         this._super(posX, posY, dir);
         this._pre = pre;
+        this.node.active = !hide;
         return this;
     },
 

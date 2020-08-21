@@ -12,13 +12,45 @@ const Direction = cc.Enum({
 });
 // 方向组合
 
-// 蛇的速度（单位：s）
-const Snake_Origin_Speed = 0.3
+// 关卡常规速度（单位：s）
+const Level_Speed = {
+    ["Level_1"]: 0.2,
+    ["Level_2"]: 0.18,
+    ["Level_3"]: 0.16,
+    ["Level_4"]: 0.14,
+    ["Level_5"]: 0.12,
+}
+
+// 关卡苹果基础生命值
+const Level_Apple_Life_Time = 10;
+
+const Level = cc.Enum({
+    Level_1: 1,
+    Level_2: 2,
+    Level_3: 3,
+    Level_4: 4,
+    Level_5: 5,
+});
+
+const Level_Score = cc.Enum({
+    Level_1: 30,
+    Level_2: 100,
+    Level_3: 300,
+    Level_4: 1000,
+    Level_5: 9999,
+});
+
+// 最高记录密钥
+const Secret_Key = "fsigjis3465756ushfr37";
 
 module.exports = {
     Design_Cell_Size,
     Design_Cell_Width,
     Design_Cell_Height,
     Direction,
-    Snake_Origin_Speed
+    Level_Speed,
+    Level,
+    Level_Apple_Life_Time,
+    Secret_Key,
+    Level_Score
 }
