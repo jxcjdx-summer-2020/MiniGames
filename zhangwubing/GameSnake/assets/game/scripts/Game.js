@@ -7,20 +7,20 @@ cc.Class({
         snakeNode: cc.Node,
         wallNode: cc.Node,
         appleNode: cc.Node,
-        gameOverNode: cc.Node
+        gameOverNode: cc.Node,
+        totalScore: cc.Label,
+        maxScore: cc.Label,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         this.initData();
-        this.initUI(1);
-
+        this.initUI();
     },
 
     start() {
         this.onEvent();
-        this.driverSanke(Enum.Snake_Origin_Speed);
     },
 
     onEvent() {
@@ -30,25 +30,42 @@ cc.Class({
     },
 
     offEvent() {
-
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp.bind(this), this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown.bind(this), this);
     },
 
     initData() {
         this._snakes = [];
         this._walls = [];
         this._apples = [];
+        this._enemySnakes = [];     // 人机蛇
         this._randomCount = 0;
+        this.level = 5;
+        this.score = 0;
+        this.current_dir = Enum.Direction.Left;
+        this.setMaxScoreLabel();
     },
 
-    initUI(level) {
-        switch (level) {
-            case 1:
-                this.initUI_1();
-
+    initUI() {
+        if (this.level == Enum.Level.Level_1) {
+            this.initUI_1();
+        } else if (this.level == Enum.Level.Level_2) {
+            this.initUI_2();
+        } else if (this.level == Enum.Level.Level_3) {
+            this.initUI_3();
+        } else if (this.level == Enum.Level.Level_4) {
+            this.initUI_4();
+        } else if (this.level == Enum.Level.Level_5) {
+            this.initUI_5();
+            // 驱动人机蛇
+            this.driverEnemySanke(Enum.Level_Speed["Level_" + this.level]);
         }
+        // 驱动
+        this.driverSanke(Enum.Level_Speed["Level_" + this.level]);
     },
 
     initUI_1() {
+        this.deskClear();
         // 蛇本体
         this.initSnake(0, 0, Enum.Direction.Left, 4);
         // 地图
@@ -62,22 +79,175 @@ cc.Class({
         }
         this.initMap(wallPos);
         // 苹果
-        this.initApple(10);
+        this.initApples(1);
     },
 
-    initApple(size) {
-        for (let i = 0; i < size; i++) {
-            let prefab = app.prefabMgr.getPrefabByName("Apple");
-            var apple = cc.instantiate(prefab);
-            apple.parent = this.appleNode;
-            let { posX, posY } = this.getRandomCellPosition();
-            var _apple = apple.getComponent("Apple").init(posX, posY);
-            this._apples.push(_apple);
+    initUI_2() {
+        this.deskClear();
+        // 蛇本体
+        this.initSnake(0, 0, Enum.Direction.Left, 4);
+        // 地图
+        var wallPos = [];
+        for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
+            for (let j = -1 * Enum.Design_Cell_Height; j <= Enum.Design_Cell_Height; j++) {
+                if (i == -1 * Enum.Design_Cell_Width || i == Enum.Design_Cell_Width || j == -1 * Enum.Design_Cell_Height || j == Enum.Design_Cell_Height) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+            }
         }
+        wallPos.push({ posX: 0, posY: Math.floor(Enum.Design_Cell_Height / 2) });
+        wallPos.push({ posX: 0, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
+        this.initMap(wallPos);
+        // 苹果
+        this.initApples(2);
+    },
+
+    initUI_3() {
+        this.deskClear();
+        // 蛇本体
+        this.initSnake(0, 0, Enum.Direction.Left, 4);
+        // 地图
+        var wallPos = [];
+        for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
+            for (let j = -1 * Enum.Design_Cell_Height; j <= Enum.Design_Cell_Height; j++) {
+                if (i == -1 * Enum.Design_Cell_Width || i == Enum.Design_Cell_Width || j == -1 * Enum.Design_Cell_Height || j == Enum.Design_Cell_Height) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+            }
+        }
+        for (let i = -2; i <= 2; i++) {
+            wallPos.push({ posX: i, posY: Math.floor(Enum.Design_Cell_Height / 2) });
+            wallPos.push({ posX: i, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
+        }
+        this.initMap(wallPos);
+        // 苹果
+        this.initApples(3);
+    },
+
+    initUI_4() {
+        this.deskClear();
+        // 蛇本体
+        this.initSnake(0, 0, Enum.Direction.Left, 4);
+        // 地图
+        var wallPos = [];
+        for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
+            for (let j = -1 * Enum.Design_Cell_Height; j <= Enum.Design_Cell_Height; j++) {
+                if (i == -1 * Enum.Design_Cell_Width || i == Enum.Design_Cell_Width || j == -1 * Enum.Design_Cell_Height || j == Enum.Design_Cell_Height) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == 13 && j >= 5 && j <= 7) || (i >= 12 && i <= 14 && j == 6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == -13 && j >= 5 && j <= 7) || (i <= -12 && i >= -14 && j == 6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == -13 && j <= -5 && j >= -7) || (i <= -12 && i >= -14 && j == -6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == 13 && j <= -5 && j >= -7) || (i >= 12 && i <= 14 && j == -6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+            }
+        }
+        this.initMap(wallPos);
+        // 苹果
+        this.initApples(4);
+    },
+
+    initUI_5() {
+        this.deskClear();
+        // 蛇本体
+        this.initSnake(-4, 0, Enum.Direction.Left, 4);
+        // 人机蛇
+        this.initEnemySnake(4, 0, Enum.Direction.Right, 4);
+        // 地图
+        var wallPos = [];
+        for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
+            for (let j = -1 * Enum.Design_Cell_Height; j <= Enum.Design_Cell_Height; j++) {
+                if (i == -1 * Enum.Design_Cell_Width || i == Enum.Design_Cell_Width || j == -1 * Enum.Design_Cell_Height || j == Enum.Design_Cell_Height) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == 13 && j >= 5 && j <= 7) || (i >= 12 && i <= 14 && j == 6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == -13 && j >= 5 && j <= 7) || (i <= -12 && i >= -14 && j == 6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == -13 && j <= -5 && j >= -7) || (i <= -12 && i >= -14 && j == -6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == 13 && j <= -5 && j >= -7) || (i >= 12 && i <= 14 && j == -6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+            }
+        }
+        for (let i = -2; i <= 2; i++) {
+            wallPos.push({ posX: i, posY: Math.floor(Enum.Design_Cell_Height / 2) });
+            wallPos.push({ posX: i, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
+        }
+        this.initMap(wallPos);
+        // 苹果
+        this.initApples(4);
+    },
+
+    deskClear() {
+        // 清理蛇
+        if (this._snakes && this._snakes.length > 0) {
+            for (let i = 0; i < this._snakes.length; i++) {
+                let _snake = this._snakes[i];
+                _snake.destroyRes();
+            }
+        }
+        // 清理苹果
+        if (this._apples && this._apples.length > 0) {
+            for (let i = 0; i < this._apples.length; i++) {
+                let _apple = this._apples[i];
+                _apple.destroyRes();
+            }
+        }
+        // 清理地图
+        if (this._walls && this._walls.length > 0) {
+            for (let i = 0; i < this._walls.length; i++) {
+                let _wall = this._walls[i];
+                _wall.destroyRes();
+            }
+        }
+        // 清理数据
+        this.initLevelData();
+    },
+
+    initLevelData() {
+        this._snakes = [];
+        this._walls = [];
+        this._apples = [];
+        this.current_dir = Enum.Direction.Left;
+    },
+
+    initApples(size) {
+        for (let i = 0; i < size; i++) {
+            this.buildApple();
+        }
+    },
+
+    initApple(_apple) {
+        let { posX, posY } = this.getRandomCellPosition();
+        return _apple.init(posX, posY);
+    },
+
+    buildApple() {
+        let prefab = app.prefabMgr.getPrefabByName("Apple");
+        var apple = cc.instantiate(prefab);
+        apple.parent = this.appleNode;
+        var _apple = apple.getComponent("Apple");
+        _apple.setGameLogic(this);
+        _apple.reset();
+        var _apple = this.initApple(_apple);
+        this._apples.push(_apple);
     },
 
     getRandomCellPosition() {
         if (this._randomCount >= 30) {
+            cc.error("找不到有效的坐标，游戏自动结束！！！");
             this.runGameOver();
             return;
         }
@@ -102,10 +272,28 @@ cc.Class({
                 break;
             }
         }
+        // 不在人机蛇数组
+        for (let i = 0; i < this._enemySnakes.length; i++) {
+            let _body = this._enemySnakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                flag = true;
+                break;
+            }
+        }
         // 不在苹果上
         for (let i = 0; i < this._apples.length; i++) {
             let _apple = this._apples[i];
             let { posX, posY } = _apple.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                flag = true;
+                break;
+            }
+        }
+        // 不在墙上
+        for (let i = 0; i < this._walls.length; i++) {
+            let _wall = this._walls[i];
+            let { posX, posY } = _wall.getCellPosition();
             if (posX == randomX && posY == randomY) {
                 flag = true;
                 break;
@@ -129,7 +317,7 @@ cc.Class({
     },
 
     /**
-     * 
+     * 我方蛇
      * @param {*} headPosX 
      * @param {*} headPosY 
      * @param {*} headDir 
@@ -140,10 +328,30 @@ cc.Class({
         var prefab = app.prefabMgr.getPrefabByName("SnakeHead");
         var headNode = cc.instantiate(prefab);
         headNode.parent = this.snakeNode;
+        headNode.zIndex = 100;
         this._head = headNode.getComponent("SnakeHead").init(headPosX, headPosY, headDir);
         this._snakes.push(this._head);
         // 身体初始化
         this.buildBody(totalLength - 1);
+    },
+
+    /**
+     * 敌方蛇
+     * @param {*} headPosX 
+     * @param {*} headPosY 
+     * @param {*} headDir 
+     * @param {*} totalLength 
+     */
+    initEnemySnake(headPosX, headPosY, headDir, totalLength) {
+        // 头部初始化
+        var prefab = app.prefabMgr.getPrefabByName("SnakeHead");
+        var headNode = cc.instantiate(prefab);
+        headNode.parent = this.snakeNode;
+        headNode.zIndex = 100;
+        this._enemyHead = headNode.getComponent("SnakeHead").init(headPosX, headPosY, headDir);
+        this._enemySnakes.push(this._enemyHead);
+        // 身体初始化
+        this.buildEnemyBody(totalLength - 1);
     },
 
     buildBody(size) {
@@ -152,22 +360,44 @@ cc.Class({
             return;
         }
         for (let i = 0; i < size; i++) {
-            var prefab = app.prefabMgr.getPrefabByName("SnakeBody");
-            let bodyNode = cc.instantiate(prefab);
-            bodyNode.parent = this.snakeNode;
-            let _lastBody = this.getLastBody();
-            let { posX, posY } = this.getNextCellPosByNode(_lastBody, false);
-            let lastDir = _lastBody.getDirection();
-            var _body = bodyNode.getComponent("SnakeBody").init(posX, posY, lastDir, _lastBody);
-            this._snakes.push(_body);
+            this.initBody();
         }
     },
 
-    driverSanke(speed) {
-        this.speed = speed;
-        this.unschedule(this.snakeTimer);
-        this.schedule(this.snakeTimer, this.speed, this);
-        this.snakeTimer();
+    buildEnemyBody(size) {
+        if (!size) {
+            cc.error("The size of building snake body is null or zero");
+            return;
+        }
+        for (let i = 0; i < size; i++) {
+            this.initEnemyBody();
+        }
+    },
+
+    initBody(hide) {
+        hide = hide || false;
+        var prefab = app.prefabMgr.getPrefabByName("SnakeBody");
+        let bodyNode = cc.instantiate(prefab);
+        bodyNode.parent = this.snakeNode;
+        bodyNode.zIndex = 1;
+        let _lastBody = this.getLastBody(this._snakes);
+        let { posX, posY } = this.getNextCellPosByNode(_lastBody, false);
+        let lastDir = _lastBody.getDirection();
+        var _body = bodyNode.getComponent("SnakeBody").init(posX, posY, lastDir, _lastBody, hide);
+        this._snakes.push(_body);
+    },
+
+    initEnemyBody(hide) {
+        hide = hide || false;
+        var prefab = app.prefabMgr.getPrefabByName("SnakeBody");
+        let bodyNode = cc.instantiate(prefab);
+        bodyNode.parent = this.snakeNode;
+        bodyNode.zIndex = 1;
+        let _lastBody = this.getLastBody(this._enemySnakes);
+        let { posX, posY } = this.getNextCellPosByNode(_lastBody, false);
+        let lastDir = _lastBody.getDirection();
+        var _body = bodyNode.getComponent("SnakeBody").init(posX, posY, lastDir, _lastBody, hide);
+        this._enemySnakes.push(_body);
     },
 
     snakeTimer() {
@@ -188,19 +418,173 @@ cc.Class({
             dir = this.current_dir;
         }
         this._head.init(posX, posY, dir);
+        // 是否吃到苹果
+        let { flag, _apple } = this.isEatApple(posX, posY);
+        if (flag) {
+            this.gainScore(_apple.getAppleScore());
+            this.initApple(_apple);
+            this.grow();
+        }
         // 是否游戏结束
         if (this.isGameOver(posX, posY)) {
             this.runGameOver();
         }
     },
 
+    snakeEnemyTimer() {
+        this.onEnemySnakeAutoDriver();
+        cc.log();
+        // 渲染身体
+        for (let i = this._enemySnakes.length - 1; i > 0; i--) {
+            let _enemySnake = this._enemySnakes[i];
+            var _pre = _enemySnake.getPreBody();
+            if (_pre != null) {
+                let { posX, posY } = _pre.getCellPosition();
+                let dir = _pre.getDirection();
+                _enemySnake.init(posX, posY, dir, _pre);
+            }
+        }
+        // 渲染头
+        let { posX, posY } = this.getNextCellPosByNode(this._enemyHead, true);
+        let dir = this._enemyHead.getDirection();
+        if (this.isVaildDir(dir, this.current_enemy_dir)) {
+            dir = this.current_enemy_dir;
+        }
+        this._enemyHead.init(posX, posY, dir);
+        // 是否吃到苹果
+        let { flag, _apple } = this.isEatApple(posX, posY);
+        if (flag) {
+            this.initApple(_apple);
+            this.enemyGrow();
+        }
+    },
+
+    onEnemySnakeAutoDriver() {
+        var vaildPos = this.getVaildPosByAutoDriver();
+        if (vaildPos.length == 0) {
+            // 取消人机蛇的自动驾驶
+            this.unschedule(this.driverEnemySanke);
+            this.gainScore(Math.ceil(Enum.Level_Score.Level_5 / 2));
+            for (let i = 0; i < this._enemySnakes.length; i++) {
+                let _body = this._enemySnakes[i];
+                _body.destroyRes();
+            }
+            return;
+        }
+        var randomIndex = Math.floor(Math.random() * vaildPos.length);
+        this.current_enemy_dir = this.getDirectionByAutoDriver(vaildPos[randomIndex]);
+    },
+
+    getDirectionByAutoDriver(randomPos) {
+        var enemyHeadPos = this._enemyHead.getCellPosition();
+        var deltaX = randomPos.posX - enemyHeadPos.posX;
+        var deltaY = randomPos.posY - enemyHeadPos.posY;
+        if (deltaX < 0) {
+            return Enum.Direction.Left;
+        }
+        if (deltaX > 0) {
+            return Enum.Direction.Right;
+        }
+        if (deltaY > 0) {
+            return Enum.Direction.Up;
+        }
+        if (deltaY < 0) {
+            return Enum.Direction.Down;
+        }
+    },
+
+    getVaildPosByAutoDriver() {
+        let { posX, posY } = this._enemyHead.getCellPosition();
+        var vaildPos = [];
+        if (!this.isNotVaildPos({ posX: posX + 1, posY: posY })) {
+            vaildPos.push({ posX: posX + 1, posY: posY });
+        }
+        if (!this.isNotVaildPos({ posX: posX, posY: posY + 1 })) {
+            vaildPos.push({ posX: posX, posY: posY + 1 });
+        }
+        if (!this.isNotVaildPos({ posX: posX, posY: posY - 1 })) {
+            vaildPos.push({ posX: posX, posY: posY - 1 });
+        }
+        if (!this.isNotVaildPos({ posX: posX - 1, posY: posY })) {
+            vaildPos.push({ posX: posX - 1, posY: posY });
+        }
+        return vaildPos;
+    },
+
+    grow() {
+        this.initBody(true);
+    },
+
+    enemyGrow() {
+        this.initEnemyBody(true);
+    },
+
+    gainScore(score) {
+        this.score += score;
+        this.totalScore.string = this.formatScore(this.score);
+        // 判断过关
+        if (this.score > Enum.Level_Score["Level_" + this.level]) {
+            this.level += 1;
+            this.initUI();
+        }
+    },
+
+    formatScore(score) {
+        if (score < 10) {
+            return "0" + score;
+        } else {
+            return score;
+        }
+    },
+
+    /**
+     * 判断该坐标上是否有苹果
+     * @param {*} headPosX 
+     * @param {*} headPosY 
+     */
+    isEatApple(headPosX, headPosY) {
+        for (let i = 0; i < this._apples.length; i++) {
+            let _apple = this._apples[i];
+            let { posX, posY } = _apple.getCellPosition();
+            if (posX == headPosX && posY == headPosY) {
+                return { flag: true, _apple: _apple }
+            }
+        }
+        return { flag: false }
+    },
+
     runGameOver() {
-        // 取消运动
-        this.unschedule(this.snakeTimer);
+        // 取消所有定时器
+        this.unscheduleAllCallbacks();
+        // 取消所有的苹果定时器
+        for (let i = 0; i < this._apples.length; i++) {
+            let _apple = this._apples[i];
+            _apple.reset();
+        }
+        // 取消事件监听
+        this.offEvent();
         // 闪动
         this.addBlinkAnim();
         // show "GameOver"
         this.addGameOverAnim();
+        // 上传分数
+        this.setMaxScore();
+    },
+
+    setMaxScore() {
+        var maxScore = this.getMaxScore();
+        if (this.score > maxScore) {
+            cc.sys.localStorage.setItem(Enum.Secret_Key, this.score);
+            this.setMaxScoreLabel();
+        }
+    },
+
+    setMaxScoreLabel() {
+        this.maxScore.string = this.formatScore(this.getMaxScore());
+    },
+
+    getMaxScore() {
+        return cc.sys.localStorage.getItem(Enum.Secret_Key) || 0;
     },
 
     addGameOverAnim() {
@@ -221,6 +605,14 @@ cc.Class({
         for (let i = 0; i < this._walls.length; i++) {
             const _wall = this._walls[i];
             let { posX, posY } = _wall.getCellPosition();
+            if (headPosX == posX && headPosY == posY) {
+                return true;
+            }
+        }
+        // 撞身体
+        for (let i = 1; i < this._snakes.length; i++) {
+            const _body = this._snakes[i];
+            let { posX, posY } = _body.getCellPosition();
             if (headPosX == posX && headPosY == posY) {
                 return true;
             }
@@ -249,14 +641,68 @@ cc.Class({
         if (currentDir == Enum.Direction.Down && targetDir == Enum.Direction.Up) {
             return false;
         }
+        if (currentDir == Enum.Direction.Left && targetDir == Enum.Direction.Left) {
+            return false;
+        }
+        if (currentDir == Enum.Direction.Right && targetDir == Enum.Direction.Right) {
+            return false;
+        }
+        if (currentDir == Enum.Direction.Up && targetDir == Enum.Direction.Up) {
+            return false;
+        }
+        if (currentDir == Enum.Direction.Down && targetDir == Enum.Direction.Down) {
+            return false;
+        }
         return true;
     },
 
-    getLastBody() {
-        if (this._snakes && this._snakes.length > 0) {
-            return this._snakes[this._snakes.length - 1];
+    getLastBody(_snakes) {
+        if (_snakes && _snakes.length > 0) {
+            return _snakes[_snakes.length - 1];
         }
         cc.error("This snakes is null");
+    },
+
+    speedUp() {
+        if (this.isRunSpeedUp) {
+            return;
+        }
+        this.speed = 2 * this.getCurrentLevelSpeed();
+        this.speedDriver();
+        this.isRunSpeedUp = true;
+    },
+
+    speedDown() {
+        this.speed = this.getCurrentLevelSpeed();
+        this.speedDriver();
+        this.isRunSpeedUp = false;
+    },
+
+    driverSanke(speed) {
+        this.speed = speed;
+        this.isRunSpeedUp = false;
+        this.speedDriver();
+    },
+
+    driverEnemySanke(speed) {
+        this.enemySpeed = speed;
+        this.speedEnemyDriver();
+    },
+
+    speedDriver() {
+        this.unschedule(this.snakeTimer);
+        this.schedule(this.snakeTimer, this.speed, this);
+        this.snakeTimer();
+    },
+
+    speedEnemyDriver() {
+        this.unschedule(this.snakeEnemyTimer);
+        this.schedule(this.snakeEnemyTimer, this.enemySpeed, this);
+        this.snakeEnemyTimer();
+    },
+
+    getCurrentLevelSpeed() {
+        return Enum.Level_Speed["Level_" + this.level];
     },
 
     /**
@@ -281,6 +727,15 @@ cc.Class({
 
     onKeyUp(event) {
         switch (event.keyCode) {
+            case cc.macro.KEY.e:
+                // 加速
+                // this.speedDown();
+                break;
+        }
+    },
+
+    onKeyDown(event) {
+        switch (event.keyCode) {
             case cc.macro.KEY.a:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Left;
@@ -297,13 +752,9 @@ cc.Class({
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Down;
                 break;
-        }
-    },
-
-    onKeyDown(event) {
-        switch (event.keyCode) {
             case cc.macro.KEY.e:
                 // 加速
+                // this.speedUp();
                 break;
         }
     },

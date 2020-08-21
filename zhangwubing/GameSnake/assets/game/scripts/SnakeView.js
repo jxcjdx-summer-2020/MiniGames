@@ -36,6 +36,4 @@ cc.Class({
         this._super(posX, posY);
         this.dir = dir;
     }, 
-
-    // update (dt) {},
 });

@@ -12,4 +12,13 @@ cc.Class({
     initManager() {
         this.prefabMgr = this.node.getComponent("PrefabManager").init();
     },
+
+    onRestartButtonClick() {
+        // 弹出对话框，提示
+        // if (this.isGameRunning) {
+            
+            
+        // }
+        cc.game.restart();
+    },
 })

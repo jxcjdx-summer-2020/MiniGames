@@ -44,4 +44,9 @@ cc.Class({
         this.posX = posX;
         this.posY = posY;
     },
+
+    destroyRes() {
+        this.node.active = false;
+        this.node.destroy();
+    },
 });
