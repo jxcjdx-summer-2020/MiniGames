@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "boss",
+    "_name": "Enemybullet",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -42,8 +42,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 194,
-      "height": 130
+      "width": 55,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -95,10 +95,10 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "4a170cc5-25e9-4fc6-b14f-d4db31c99648"
+      "__uuid__": "47716618-588c-49ef-a26e-b9ae4fb0692a"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -112,20 +112,13 @@
     "_id": ""
   },
   {
-    "__type__": "9323fSOTt1LMrFp9zuxyDaY",
+    "__type__": "5560bfCeMpJAZZ76aGR8fbk",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "hp": 5,
-    "blastPrefab": {
-      "__uuid__": "9078cbb9-ca4e-4221-a635-7a2f7ea991b3"
-    },
-    "enemybulletPrefab": {
-      "__uuid__": "48d8ae43-a411-41b0-a252-f68cf481716d"
-    },
     "_id": ""
   },
   {
@@ -144,8 +137,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 194,
-      "height": 130
+      "width": 55,
+      "height": 100
     },
     "_id": ""
   },
@@ -155,9 +148,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "ca936dc0-c73a-4036-8b00-c9ceee2afac6"
+      "__uuid__": "48d8ae43-a411-41b0-a252-f68cf481716d"
     },
-    "fileId": "baChUTPIxO+rgSn4G9q180",
+    "fileId": "b2PWIGK+NJp5TDtZONWD6L",
     "sync": false
   }
 ]
