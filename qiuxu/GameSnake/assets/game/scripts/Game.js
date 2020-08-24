@@ -40,7 +40,7 @@ cc.Class({
         this._apples = [];
         this._enemySnakes = [];     // 人机蛇
         this._randomCount = 0;
-        this.level = 5;
+        this.level = 1;
         this.score = 0;
         this.current_dir = Enum.Direction.Left;
         this.setMaxScoreLabel();
@@ -59,6 +59,9 @@ cc.Class({
             this.initUI_5();
             // 驱动人机蛇
             this.driverEnemySanke(Enum.Level_Speed["Level_" + this.level]);
+        }
+        else if (this.level == Enum.Level.Level_6) {
+            this.initUI_6();
         }
         // 驱动
         this.driverSanke(Enum.Level_Speed["Level_" + this.level]);
@@ -95,6 +98,8 @@ cc.Class({
                 }
             }
         }
+        wallPos.push({ posX: Math.floor(Enum.Design_Cell_Width/2), posY: 0 });
+        wallPos.push({ posX: -1 * Math.floor(Enum.Design_Cell_Width / 2), posY:  0 });
         wallPos.push({ posX: 0, posY: Math.floor(Enum.Design_Cell_Height / 2) });
         wallPos.push({ posX: 0, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
         this.initMap(wallPos);
@@ -187,7 +192,48 @@ cc.Class({
         }
         this.initMap(wallPos);
         // 苹果
-        this.initApples(4);
+        this.initApples(5);
+    },
+
+    initUI_6() {
+        this.deskClear();
+        // 蛇本体
+        this.initSnake(-4, 0, Enum.Direction.Left, 4);
+        // 人机蛇
+        // this.initEnemySnake(4, 0, Enum.Direction.Right, 4);
+        // 地图
+        var wallPos = [];
+        for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
+            for (let j = -1 * Enum.Design_Cell_Height; j <= Enum.Design_Cell_Height; j++) {
+                if (i == -1 * Enum.Design_Cell_Width || i == Enum.Design_Cell_Width || j == -1 * Enum.Design_Cell_Height || j == Enum.Design_Cell_Height) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == 13 && j >= 5 && j <= 7) || (i >= 12 && i <= 14 && j == 6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == -13 && j >= 5 && j <= 7) || (i <= -12 && i >= -14 && j == 6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == -13 && j <= -5 && j >= -7) || (i <= -12 && i >= -14 && j == -6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+                if ((i == 13 && j <= -5 && j >= -7) || (i >= 12 && i <= 14 && j == -6)) {
+                    wallPos.push({ posX: i, posY: j });
+                }
+            }
+        }
+        for (let i = -5; i <= 5; i++) {
+            wallPos.push({ posX: i, posY: Math.floor(Enum.Design_Cell_Height / 2) });
+            wallPos.push({ posX: i, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
+        }
+
+        for (let i = -5; i <= 5; i++) {
+            wallPos.push({ posX: Math.floor(Enum.Design_Cell_Width / 2)+2, posY: i });
+            wallPos.push({ posX: -1 * (Math.floor(Enum.Design_Cell_Width / 2)+2), posY: i });
+        }
+        this.initMap(wallPos);
+        // 苹果
+        this.initApples(6);
     },
 
     deskClear() {
@@ -412,7 +458,7 @@ cc.Class({
             }
         }
         // 渲染头
-        let { posX, posY } = this.getNextCellPosByNode(this._head, true);
+        let { posX, posY } = this.getNextCellPosByNode(this._head, true); 
         let dir = this._head.getDirection();
         if (this.isVaildDir(dir, this.current_dir)) {
             dir = this.current_dir;
@@ -479,16 +525,16 @@ cc.Class({
         var enemyHeadPos = this._enemyHead.getCellPosition();
         var deltaX = randomPos.posX - enemyHeadPos.posX;
         var deltaY = randomPos.posY - enemyHeadPos.posY;
-        if (deltaX < 0) {
+        if (deltaX == -1 && deltaY == 0) {
             return Enum.Direction.Left;
         }
-        if (deltaX > 0) {
+        if (deltaX == 1 && deltaY == 0) {
             return Enum.Direction.Right;
         }
-        if (deltaY > 0) {
+        if (deltaY == 1 && deltaX == 0) {
             return Enum.Direction.Up;
         }
-        if (deltaY < 0) {
+        if (deltaY == -1 && deltaX == 0) {
             return Enum.Direction.Down;
         }
     },
@@ -499,15 +545,16 @@ cc.Class({
         if (!this.isNotVaildPos({ posX: posX + 1, posY: posY })) {
             vaildPos.push({ posX: posX + 1, posY: posY });
         }
+        if (!this.isNotVaildPos({ posX: posX - 1, posY: posY })) {
+            vaildPos.push({ posX: posX - 1, posY: posY });
+        }
         if (!this.isNotVaildPos({ posX: posX, posY: posY + 1 })) {
             vaildPos.push({ posX: posX, posY: posY + 1 });
         }
         if (!this.isNotVaildPos({ posX: posX, posY: posY - 1 })) {
             vaildPos.push({ posX: posX, posY: posY - 1 });
         }
-        if (!this.isNotVaildPos({ posX: posX - 1, posY: posY })) {
-            vaildPos.push({ posX: posX - 1, posY: posY });
-        }
+        
         return vaildPos;
     },
 
