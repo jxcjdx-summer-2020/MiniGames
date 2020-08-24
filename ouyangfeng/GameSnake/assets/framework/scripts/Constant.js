@@ -33,10 +33,15 @@ const Level = cc.Enum({
 });
 
 const Level_Score = cc.Enum({
-    Level_1: 30,
-    Level_2: 100,
-    Level_3: 300,
-    Level_4: 1000,
+    // Level_1: 30,
+    // Level_2: 100,
+    // Level_3: 300,
+    // Level_4: 1000,
+    // Level_5: 9999,
+    Level_1: 10,
+    Level_2: 30,
+    Level_3: 60,
+    Level_4: 100,
     Level_5: 9999,
 });
 
@@ -52,5 +57,5 @@ module.exports = {
     Level,
     Level_Apple_Life_Time,
     Secret_Key,
-    Level_Score
+    Level_Score,
 }
