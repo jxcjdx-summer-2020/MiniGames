@@ -10,28 +10,33 @@ cc.Class({
         gameOverNode: cc.Node,
         totalScore: cc.Label,
         maxScore: cc.Label,
+        currentlevel: cc.Label,
+        targetScore: cc.Label,
+        lifeTimeNode: cc.Node,
+        operateNode: cc.Node
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        this._operate = this.operateNode.getComponent("Operate");
         this.initData();
-        this.initUI();
     },
 
     start() {
         this.onEvent();
+        this._operate.init();
     },
 
     onEvent() {
         this.offEvent();
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp.bind(this), this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown.bind(this), this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     },
 
     offEvent() {
-        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp.bind(this), this);
-        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown.bind(this), this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     },
 
     initData() {
@@ -39,29 +44,77 @@ cc.Class({
         this._walls = [];
         this._apples = [];
         this._enemySnakes = [];     // 人机蛇
-        this._randomCount = 0;
-        this.level = 5;
+        this._randomCount = 0;      // 苹果随机位置递归深度
+        this.autoDriverCount = 0;  // 人机蛇位置递归预判深度
         this.score = 0;
+        this.speedstate = false;
         this.current_dir = Enum.Direction.Left;
         this.setMaxScoreLabel();
+        this.setCurrentLevel(1);
+        this.setLifeTime(30);
     },
 
-    initUI() {
-        if (this.level == Enum.Level.Level_1) {
+    setLifeTime(lifeTime) {
+        this.unschedule(this.lifeTimeTimer);
+        this.totalLifeTime = lifeTime;
+        this.remainLifeTime = lifeTime;
+        this.schedule(this.lifeTimeTimer.bind(this), 0.1);
+        this.lifeTimeTimer();
+    },
+
+    lifeTimeTimer() {
+        if (this.remainLifeTime < 0) {
+            this.unschedule(this.lifeTimeTimer);
+            this.runGameOver();
+            return;
+        }
+        this.setLifeTimePercent();
+        this.remainLifeTime -= 0.1;
+    },
+
+    setLifeTimePercent() {
+        let scale = this.remainLifeTime / this.totalLifeTime;
+        cc.log("scale = ", scale);
+        if (scale >= 0 && scale <= 1) {
+            // 比例
+            this.lifeTimeNode.scaleX = scale;
+            // 颜色
+            let color = new cc.color(0, 255, 0);
+            if (scale >= 0.2 && scale <= 0.75) {
+                color = new cc.color(255, 255, 0);
+            } else if (scale < 0.2) {
+                color = new cc.color(255, 0, 0);
+            }
+            this.lifeTimeNode.color = color;
+        } else {
+            cc.error("The scale of life time is error = ", scale);
+        }
+    },
+
+    setCurrentLevel(level) {
+        this.level = level;
+        this.currentlevel.string = this.formatNum(level);
+        this.targetScore.string = Enum.Level_Score["Level_" + level];
+        this.initUI(level);
+    },
+
+    initUI(level) {
+        if (level == Enum.Level.Level_1) {
             this.initUI_1();
-        } else if (this.level == Enum.Level.Level_2) {
+        } else if (level == Enum.Level.Level_2) {
             this.initUI_2();
-        } else if (this.level == Enum.Level.Level_3) {
+        } else if (level == Enum.Level.Level_3) {
             this.initUI_3();
-        } else if (this.level == Enum.Level.Level_4) {
+        } else if (level == Enum.Level.Level_4) {
             this.initUI_4();
-        } else if (this.level == Enum.Level.Level_5) {
+        } else if (level == Enum.Level.Level_5) {
             this.initUI_5();
             // 驱动人机蛇
-            this.driverEnemySanke(Enum.Level_Speed["Level_" + this.level]);
+            this.driverEnemySanke(Enum.Level_Speed["Level_" + level]);
+            // this.driverEnemySanke(1);
         }
         // 驱动
-        this.driverSanke(Enum.Level_Speed["Level_" + this.level]);
+        this.driverSanke(Enum.Level_Speed["Level_" + level]);
     },
 
     initUI_1() {
@@ -160,10 +213,6 @@ cc.Class({
 
     initUI_5() {
         this.deskClear();
-        // 蛇本体
-        this.initSnake(-4, 0, Enum.Direction.Left, 4);
-        // 人机蛇
-        this.initEnemySnake(4, 0, Enum.Direction.Right, 4);
         // 地图
         var wallPos = [];
         for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
@@ -190,6 +239,10 @@ cc.Class({
             wallPos.push({ posX: i, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
         }
         this.initMap(wallPos);
+        // 蛇本体
+        this.initSnake(-4, 0, Enum.Direction.Left, 4);
+        // 人机蛇
+        this.initEnemySnake(4, 0, Enum.Direction.Right, 4);
         // 苹果
         this.initApples(4);
     },
@@ -265,6 +318,11 @@ cc.Class({
         return { posX: randomX, posY: randomY };
     },
 
+    /**
+     * 判断当前坐标上是不可用的，给苹果调用
+     * @param {*} randomX 
+     * @param {*} randomY 
+     */
     isNotVaildPos(randomX, randomY) {
         var flag = false;
         // 不在蛇数组
@@ -272,8 +330,7 @@ cc.Class({
             let _body = this._snakes[i];
             let { posX, posY } = _body.getCellPosition();
             if (posX == randomX && posY == randomY) {
-                flag = true;
-                break;
+                return true;
             }
         }
         // 不在人机蛇数组
@@ -281,8 +338,7 @@ cc.Class({
             let _body = this._enemySnakes[i];
             let { posX, posY } = _body.getCellPosition();
             if (posX == randomX && posY == randomY) {
-                flag = true;
-                break;
+                return true;
             }
         }
         // 不在苹果上
@@ -304,6 +360,40 @@ cc.Class({
             }
         }
         return flag;
+    },
+
+    /**
+     * 判断当前坐标上是不可用的，给人机蛇调用
+     * @param {*} randomPos 
+     */
+    isNotVaildPosToEnemySnake(randomPos) {
+        let randomX = randomPos.posX;
+        let randomY = randomPos.posY;
+        // 在蛇数组
+        for (let i = 0; i < this._snakes.length; i++) {
+            let _body = this._snakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在人机蛇数组
+        for (let i = 0; i < this._enemySnakes.length; i++) {
+            let _body = this._enemySnakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在墙上
+        for (let i = 0; i < this._walls.length; i++) {
+            let _wall = this._walls[i];
+            let { posX, posY } = _wall.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        return false;
     },
 
     initMap(wallCellPosArray) {
@@ -376,6 +466,7 @@ cc.Class({
         for (let i = 0; i < size; i++) {
             this.initEnemyBody();
         }
+        cc.log("人机蛇初始化完成：", this._enemySnakes);
     },
 
     initBody(hide) {
@@ -416,16 +507,18 @@ cc.Class({
             }
         }
         // 渲染头
-        let { posX, posY } = this.getNextCellPosByNode(this._head, true);
         let dir = this._head.getDirection();
         if (this.isVaildDir(dir, this.current_dir)) {
             dir = this.current_dir;
         }
+        this._head.setDirection(dir);
+        let { posX, posY } = this.getNextCellPosByNode(this._head, true);
         this._head.init(posX, posY, dir);
         // 是否吃到苹果
         let { flag, _apple } = this.isEatApple(posX, posY);
         if (flag) {
             this.gainScore(_apple.getAppleScore());
+            this.gainLifeTime(_apple.getAppleLifeTime());
             this.initApple(_apple);
             this.grow();
         }
@@ -437,7 +530,6 @@ cc.Class({
 
     snakeEnemyTimer() {
         this.onEnemySnakeAutoDriver();
-        cc.log();
         // 渲染身体
         for (let i = this._enemySnakes.length - 1; i > 0; i--) {
             let _enemySnake = this._enemySnakes[i];
@@ -449,12 +541,9 @@ cc.Class({
             }
         }
         // 渲染头
+        this._enemyHead.setDirection(this.current_enemy_dir);
         let { posX, posY } = this.getNextCellPosByNode(this._enemyHead, true);
-        let dir = this._enemyHead.getDirection();
-        if (this.isVaildDir(dir, this.current_enemy_dir)) {
-            dir = this.current_enemy_dir;
-        }
-        this._enemyHead.init(posX, posY, dir);
+        this._enemyHead.init(posX, posY, this.current_enemy_dir);
         // 是否吃到苹果
         let { flag, _apple } = this.isEatApple(posX, posY);
         if (flag) {
@@ -464,10 +553,10 @@ cc.Class({
     },
 
     onEnemySnakeAutoDriver() {
-        var vaildPos = this.getVaildPosByAutoDriver();
+        var vaildPos = this.getVaildPosByAutoDriver(this._enemyHead.getCellPosition());
         if (vaildPos.length == 0) {
             // 取消人机蛇的自动驾驶
-            this.unschedule(this.driverEnemySanke);
+            this.unschedule(this.snakeEnemyTimer);
             this.gainScore(Math.ceil(Enum.Level_Score.Level_5 / 2));
             for (let i = 0; i < this._enemySnakes.length; i++) {
                 let _body = this._enemySnakes[i];
@@ -497,20 +586,54 @@ cc.Class({
         }
     },
 
-    getVaildPosByAutoDriver() {
-        let { posX, posY } = this._enemyHead.getCellPosition();
+    /**
+     * 预判未来2步可选坐标
+     */
+    getVaildPosByAutoDriver(enemyHeadPos) {
+        var vaildPos = this.getVaildPosByRootPos(enemyHeadPos);
+        var childVaildPosLengths = [];
+        var maxLength = 0;
+        var returnVaildPos = [];
+        for (let i = 0; i < vaildPos.length; i++) {
+            let pos = vaildPos[i];
+            let childVaildPosLength = this.getVaildPosByRootPos(pos).length;
+            if (maxLength < childVaildPosLength) {
+                maxLength = childVaildPosLength;
+            }
+            childVaildPosLengths.push({ childLength: childVaildPosLength, pos: pos });
+        }
+        for (let i = 0; i < childVaildPosLengths.length; i++) {
+            const element = childVaildPosLengths[i];
+            if (element.childLength == maxLength) {
+                returnVaildPos.push(element.pos);
+            }
+        }
+        return returnVaildPos;
+    },
+
+    // 四叉树
+    getVaildPosByRootPos(rootPos) {
+        let { posX, posY } = rootPos;
         var vaildPos = [];
-        if (!this.isNotVaildPos({ posX: posX + 1, posY: posY })) {
-            vaildPos.push({ posX: posX + 1, posY: posY });
+        // (x + 1)方向
+        let pos = { posX: posX + 1, posY: posY };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
-        if (!this.isNotVaildPos({ posX: posX, posY: posY + 1 })) {
-            vaildPos.push({ posX: posX, posY: posY + 1 });
+        // (x - 1)方向
+        pos = { posX: posX - 1, posY: posY };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
-        if (!this.isNotVaildPos({ posX: posX, posY: posY - 1 })) {
-            vaildPos.push({ posX: posX, posY: posY - 1 });
+        // (y + 1)方向
+        pos = { posX: posX, posY: posY + 1 };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
-        if (!this.isNotVaildPos({ posX: posX - 1, posY: posY })) {
-            vaildPos.push({ posX: posX - 1, posY: posY });
+        // (y - 1)方向
+        pos = { posX: posX, posY: posY - 1 };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
         return vaildPos;
     },
@@ -523,17 +646,32 @@ cc.Class({
         this.initEnemyBody(true);
     },
 
+    /**
+     * 加分
+     * @param {*} score 
+     */
     gainScore(score) {
         this.score += score;
-        this.totalScore.string = this.formatScore(this.score);
+        this.totalScore.string = this.formatNum(this.score);
         // 判断过关
         if (this.score > Enum.Level_Score["Level_" + this.level]) {
             this.level += 1;
-            this.initUI();
+            this.setCurrentLevel(this.level);
+            this.totalLifeTime += 30;
+            this.remainLifeTime += 30;
         }
     },
 
-    formatScore(score) {
+    gainLifeTime(lifeTime) {
+        this.unschedule(this.lifeTimeTimer);
+        this.remainLifeTime += lifeTime;
+        if (this.remainLifeTime > this.totalLifeTime) {
+            this.totalLifeTime = this.remainLifeTime;
+        }
+        this.schedule(this.lifeTimeTimer.bind(this), 0.1);
+    },
+
+    formatNum(score) {
         if (score < 10) {
             return "0" + score;
         } else {
@@ -560,13 +698,13 @@ cc.Class({
     runGameOver() {
         // 取消所有定时器
         this.unscheduleAllCallbacks();
+        // 取消事件监听
+        this.offEvent();
         // 取消所有的苹果定时器
         for (let i = 0; i < this._apples.length; i++) {
             let _apple = this._apples[i];
             _apple.reset();
         }
-        // 取消事件监听
-        this.offEvent();
         // 闪动
         this.addBlinkAnim();
         // show "GameOver"
@@ -584,7 +722,7 @@ cc.Class({
     },
 
     setMaxScoreLabel() {
-        this.maxScore.string = this.formatScore(this.getMaxScore());
+        this.maxScore.string = this.formatNum(this.getMaxScore());
     },
 
     getMaxScore() {
@@ -616,6 +754,14 @@ cc.Class({
         // 撞身体
         for (let i = 1; i < this._snakes.length; i++) {
             const _body = this._snakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (headPosX == posX && headPosY == posY) {
+                return true;
+            }
+        }
+        // 撞人机蛇
+        for (let i = 1; i < this._enemySnakes.length; i++) {
+            const _body = this._enemySnakes[i];
             let { posX, posY } = _body.getCellPosition();
             if (headPosX == posX && headPosY == posY) {
                 return true;
@@ -668,23 +814,25 @@ cc.Class({
     },
 
     speedUp() {
-        if (this.isRunSpeedUp) {
+        if (this.speedstate) {
             return;
         }
         this.speed = 2 * this.getCurrentLevelSpeed();
         this.speedDriver();
-        this.isRunSpeedUp = true;
+        this.speedstate = true;
     },
 
     speedDown() {
+        if (!this.speedstate) {
+            return;
+        }
         this.speed = this.getCurrentLevelSpeed();
         this.speedDriver();
-        this.isRunSpeedUp = false;
+        this.speedstate = false;
     },
 
     driverSanke(speed) {
         this.speed = speed;
-        this.isRunSpeedUp = false;
         this.speedDriver();
     },
 
@@ -732,6 +880,7 @@ cc.Class({
     onKeyUp(event) {
         switch (event.keyCode) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             // case cc.macro.KEY.a:
             //     // 记录当前方向
             //     this.current_dir = Enum.Direction.Left;
@@ -749,9 +898,18 @@ cc.Class({
             //     this.current_dir = Enum.Direction.Down;
             //     break;
 =======
+=======
+            case cc.macro.KEY.a:
+            case cc.macro.KEY.w:
+            case cc.macro.KEY.d:
+            case cc.macro.KEY.s:
+                this._operate.reset();
+                break;
+>>>>>>> master_dev
             case cc.macro.KEY.e:
-                // 加速
+                // 减速
                 // this.speedDown();
+                cc.log("e键弹起");
                 break;
 >>>>>>> master_dev
         }
@@ -764,23 +922,28 @@ cc.Class({
             case cc.macro.KEY.a:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Left;
+                this._operate.setDirOpacity(Enum.Direction.Left);
                 break;
             case cc.macro.KEY.w:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Up;
+                this._operate.setDirOpacity(Enum.Direction.Up);
                 break;
             case cc.macro.KEY.d:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Right;
+                this._operate.setDirOpacity(Enum.Direction.Right);
                 break;
             case cc.macro.KEY.s:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Down;
+                this._operate.setDirOpacity(Enum.Direction.Down);
                 break;
 >>>>>>> master_dev
             case cc.macro.KEY.e:
                 // 加速
                 // this.speedUp();
+                cc.log("e键按下");
                 break;
                 case cc.macro.KEY.a:
                     // 记录当前方向
