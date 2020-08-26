@@ -229,13 +229,7 @@ cc.Class({
         wallPos.push({ posX: 0, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
         this.initMap(wallPos);
         // 苹果
-<<<<<<< HEAD
-        this.initApple(1);
-=======
-        this.initApples(2);
-<<<<<<< HEAD
->>>>>>> master_dev
-=======
+
         // 障碍物
         this.initStones(1);
         // 水
@@ -368,7 +362,6 @@ cc.Class({
             _water.destroyRes();
         }
         this._waters = [];
->>>>>>> master_dev
     },
 
     initUI_3() {
@@ -1212,8 +1205,7 @@ cc.Class({
 
     onKeyUp(event) {
         switch (event.keyCode) {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
             // case cc.macro.KEY.a:
             //     // 记录当前方向
             //     this.current_dir = Enum.Direction.Left;
@@ -1230,15 +1222,12 @@ cc.Class({
             //     // 记录当前方向
             //     this.current_dir = Enum.Direction.Down;
             //     break;
-=======
-=======
             case cc.macro.KEY.a:
             case cc.macro.KEY.w:
             case cc.macro.KEY.d:
             case cc.macro.KEY.s:
                 this._operate.reset();
                 break;
->>>>>>> master_dev
             case cc.macro.KEY.e:
                 // 减速
                 // this.speedDown();
@@ -1247,14 +1236,11 @@ cc.Class({
                 this.driverSanke(this.getCurrentLevelSpeed());
                 this._operate.resetSpeedUpOpacity();
                 break;
->>>>>>> master_dev
         }
     },
 
     onKeyDown(event) {
         switch (event.keyCode) {
-<<<<<<< HEAD
-=======
             case cc.macro.KEY.a:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Left;
@@ -1275,7 +1261,6 @@ cc.Class({
                 this.current_dir = Enum.Direction.Down;
                 this._operate.setDirOpacity(Enum.Direction.Down);
                 break;
->>>>>>> master_dev
             case cc.macro.KEY.e:
                 // 加速
                 // this.speedUp();
