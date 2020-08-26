@@ -34,6 +34,10 @@ cc.Class({
         return this.score;
     },
 
+    getAppleLifeTime() {
+        return this.lifeTime;
+    },
+
     appleTimer() {
         // 生命值判断
         if (this.lifeTime <= 0) {
