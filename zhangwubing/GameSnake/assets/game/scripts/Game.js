@@ -9,6 +9,7 @@ cc.Class({
         appleNode: cc.Node,
         stoneNode: cc.Node,
         waterNode: cc.Node,
+        doorNode: cc.Node,
         gameOverNode: cc.Node,
         totalScore: cc.Label,
         maxScore: cc.Label,
@@ -47,8 +48,9 @@ cc.Class({
         this._apples = [];
         this._stones = [];
         this._waters = [];
+        this._doors = [];
         this._enemySnakes = [];             // 人机蛇
-        this._randomCountForApple = 0;      // 苹果随机位置递归深度
+        this._randomCountForSingleCell = 0;      // 苹果随机位置递归深度
         this._randomCountForStone = 0;      // 石头随机位置递归深度
         this._randomCountForWater = 0;      // 水随机位置递归深度
         this.autoDriverCount = 0;           // 人机蛇位置递归预判深度
@@ -56,7 +58,7 @@ cc.Class({
         this.speedstate = false;
         this.current_dir = Enum.Direction.Left;
         this.setMaxScoreLabel();
-        this.setCurrentLevel(5);
+        this.setCurrentLevel(4);
         this.setLifeTime(30);
     },
 
@@ -307,14 +309,6 @@ cc.Class({
                 return true;
             }
         }
-        // 在苹果上
-        // for (let i = 0; i < this._apples.length; i++) {
-        //     let _apple = this._apples[i];
-        //     let { posX, posY } = _apple.getCellPosition();
-        //     if (posX == randomX && posY == randomY) {
-        //         return true;
-        //     }
-        // }
         // 在墙上
         for (let i = 0; i < this._walls.length; i++) {
             let _wall = this._walls[i];
@@ -335,6 +329,18 @@ cc.Class({
                 }
             }
         }
+        // 在水上
+        for (let i = 0; i < this._waters.length; i++) {
+            let _water = this._waters[i];
+            let pos = _water.getCellPosition();
+            let posArray = this.getCellPositionsForWater(pos);
+            for (let j = 0; j < posArray.length; j++) {
+                const element = posArray[j];
+                if (element.posX == randomX && element.posY == randomY) {
+                    return true;
+                }
+            }
+        }
         return false;
     },
 
@@ -342,7 +348,7 @@ cc.Class({
      * 获取碰撞的实际占位坐标
      */
     getCellPositionsForWater(pos) {
-        let {posX, posY} = pos;
+        let { posX, posY } = pos;
         var posArray = [];
         posArray.push({ posX: posX - 1, posY: posY - 1 });
         posArray.push({ posX: posX - 1, posY: posY });
@@ -391,7 +397,7 @@ cc.Class({
 
     initUI_4() {
         // 蛇本体
-        this.initSnake(0, 0, Enum.Direction.Left, 4);
+        this.initSnake(0, 0, Enum.Direction.Left, 30);
         // 地图
         var wallPos = [];
         for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
@@ -420,6 +426,36 @@ cc.Class({
         this.initStones(2);
         // 水
         this.initWaters(1);
+        // 传送门
+        this.buildDoor();
+    },
+
+    buildDoor() {
+        // 一半传送门
+        let prefab = app.prefabMgr.getPrefabByName("Door");
+        if (!prefab) {
+            cc.error("The prefab of door is null");
+            return;
+        }
+        let door1 = cc.instantiate(prefab);
+        door1.parent = this.doorNode;
+        let _door1 = door1.getComponent("Door");
+        this.initDoor(_door1);
+        this._doors.push(_door1);
+        // 另一半传送门
+        let door2 = cc.instantiate(prefab);
+        door2.parent = this.doorNode;
+        let _door2 = door2.getComponent("Door");
+        this.initDoor(_door2);
+        this._doors.push(_door2);
+        // 关联
+        _door1.setAnotherDoor(_door2.getCellPosition());
+        _door2.setAnotherDoor(_door1.getCellPosition());
+    },
+
+    initDoor(_door) {
+        let { posX, posY } = this.getRandomCellPositionForSingleCell();
+        _door.init(posX, posY);
     },
 
     initUI_5() {
@@ -504,6 +540,13 @@ cc.Class({
                 _water.destroyRes();
             }
         }
+        // 清理传送门
+        if (this._doors && this._doors.length > 0) {
+            for (let i = 0; i < this._doors.length; i++) {
+                let _door = this._doors[i];
+                _door.destroyRes();
+            }
+        }
         // 清理数据
         this.initLevelData();
     },
@@ -514,6 +557,7 @@ cc.Class({
         this._apples = [];
         this._stones = [];
         this._waters = [];
+        this._doors = [];
         this.current_dir = Enum.Direction.Left;
     },
 
@@ -524,7 +568,7 @@ cc.Class({
     },
 
     initApple(_apple) {
-        let { posX, posY } = this.getRandomCellPositionForApple();
+        let { posX, posY } = this.getRandomCellPositionForSingleCell();
         return _apple.init(posX, posY);
     },
 
@@ -539,8 +583,11 @@ cc.Class({
         this._apples.push(_apple);
     },
 
-    getRandomCellPositionForApple() {
-        if (this._randomCountForApple >= 30) {
+    /**
+     * 针对单个格子的元素，并且不和其他任何元素重叠
+     */
+    getRandomCellPositionForSingleCell() {
+        if (this._randomCountForSingleCell >= 30) {
             cc.error("找不到有效的坐标，游戏自动结束！！！");
             this.runGameOver();
             return;
@@ -549,10 +596,10 @@ cc.Class({
         var randomY = Math.floor(Math.random() * (Enum.Design_Cell_Height * 2 - 1)) - (Enum.Design_Cell_Height - 1);
         let pos = { posX: randomX, posY: randomY };
         if (this.isNotVaildPos(pos)) {
-            this._randomCountForApple += 1;     // 循环次数加1
-            return this.getRandomCellPositionForApple();
+            this._randomCountForSingleCell += 1;     // 循环次数加1
+            return this.getRandomCellPositionForSingleCell();
         }
-        this._randomCountForApple = 0;
+        this._randomCountForSingleCell = 0;
         return pos;
     },
 
@@ -619,6 +666,14 @@ cc.Class({
                 if (element.posX == randomX && element.posY == randomY) {
                     return true;
                 }
+            }
+        }
+        // 在传送门上
+        for (let i = 0; i < this._doors.length; i++) {
+            let _door = this._doors[i];
+            let { posX, posY } = _door.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
             }
         }
         return false;
@@ -787,15 +842,44 @@ cc.Class({
         this._head.setDirection(dir);
         let { posX, posY } = this.getNextCellPosByNode(this._head, true);
         this._head.init(posX, posY, dir);
+        // 触发行走事件
+        this.onSnakeRunEvent(posX, posY);
+    },
+
+    onSnakeRunEvent(headNextPosX, headNextPosY) {
+        // 是否游戏结束
+        if (this.isGameOver(headNextPosX, headNextPosY)) {
+            this.runGameOver();
+            return;
+        }
         // 是否吃到苹果
-        var { flag, _apple } = this.isEatApple(posX, posY);
-        if (flag) {
-            this.gainScore(_apple.getAppleScore());
-            this.gainLifeTime(_apple.getAppleLifeTime());
-            this.initApple(_apple);
-            this.grow();
+        if (this._apples && this._apples.length > 0) {
+            let { flag, _apple } = this.isEatApple(headNextPosX, headNextPosY);
+            if (flag) {
+                this.gainScore(_apple.getAppleScore());
+                this.gainLifeTime(_apple.getAppleLifeTime());
+                this.initApple(_apple);
+                this.grow();
+            }
         }
         // 踩水
+        this.snakeTreadWater();
+        // 踩传送门
+        if (this._doors && this._doors.length > 0) {
+            let { flag, _door } = this.snakeIsInDoor(headNextPosX, headNextPosY);
+            if (flag) {
+                let { posX, posY } = this.getNextCellPosByDoor(_door);
+                this._head.init(posX, posY);
+                // 触发行走事件
+                this.onSnakeRunEvent(posX, posY);
+            }
+        }
+    },
+
+    /**
+     * 判断是否踩水，并且做出相应的动作
+     */
+    snakeTreadWater() {
         if (this._waters && this._waters.length > 0) {
             let { isEnterWater, isExitWater } = this.snakeIsInWater();
             if (isEnterWater) {
@@ -807,9 +891,35 @@ cc.Class({
                 this.speedUp();
             }
         }
-        // 是否游戏结束
-        if (this.isGameOver(posX, posY)) {
-            this.runGameOver();
+    },
+
+    snakeIsInDoor(posX, posY) {
+        for (let i = 0; i < this._doors.length; i++) {
+            let _door = this._doors[i];
+            if (_door.posX == posX && _door.posY == posY) {
+                return { flag: true, _door: _door };
+            }
+        }
+        return { flag: false };
+    },
+
+    getNextCellPosByDoor(_door) {
+        let pos = _door.getAnotherDoor();
+        return this.getNextCellPosByNodeForDoor(pos);
+    },
+
+    getNextCellPosByNodeForDoor(pos) {
+        var dir = this._head.getDirection();
+        let { posX, posY } = pos;
+        switch (dir) {
+            case Enum.Direction.Left:
+                return { posX: posX - 1, posY: posY };
+            case Enum.Direction.Down:
+                return { posX: posX, posY: posY - 1 };
+            case Enum.Direction.Right:
+                return { posX: posX + 1, posY: posY };
+            case Enum.Direction.Up:
+                return { posX: posX, posY: posY + 1 };
         }
     },
 
@@ -1170,7 +1280,7 @@ cc.Class({
     speedDriver() {
         this.unschedule(this.snakeTimer);
         this.schedule(this.snakeTimer, this.speed, this);
-        this.snakeTimer();
+        // this.snakeTimer();
     },
 
     speedEnemyDriver() {

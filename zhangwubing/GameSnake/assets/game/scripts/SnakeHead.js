@@ -30,6 +30,9 @@ cc.Class({
     },
 
     init(posX, posY, dir) {
+        if (arguments.length == 2 || dir == null) {
+            dir = this.getDirection();
+        }
         this._super(posX, posY, dir);
         return this;
     },
