@@ -1,4 +1,3 @@
-var Cache_Prefabs = {};
 
 cc.Class({
     extends: cc.Component,
@@ -7,6 +6,9 @@ cc.Class({
         snakeBody: cc.Prefab,
         wall: cc.Prefab,
         apple: cc.Prefab,
+        stone: cc.Prefab,
+        water: cc.Prefab,
+        door: cc.Prefab,
     },
 
     /**
@@ -22,6 +24,12 @@ cc.Class({
             return this.wall;
         } else if (prefabName == "Apple") {
             return this.apple;
+        } else if (prefabName == "Stone") {
+            return this.stone;
+        } else if (prefabName == "Water") {
+            return this.water;
+        } else if (prefabName == "Door") {
+            return this.door;
         }
     },
 

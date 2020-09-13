@@ -7,65 +7,125 @@ cc.Class({
         snakeNode: cc.Node,
         wallNode: cc.Node,
         appleNode: cc.Node,
+        stoneNode: cc.Node,
+        waterNode: cc.Node,
+        doorNode: cc.Node,
         gameOverNode: cc.Node,
         totalScore: cc.Label,
         maxScore: cc.Label,
+        currentlevel: cc.Label,
+        targetScore: cc.Label,
+        lifeTimeNode: cc.Node,
+        operateNode: cc.Node
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        this._operate = this.operateNode.getComponent("Operate");
         this.initData();
-        this.initUI();
     },
 
     start() {
         this.onEvent();
+        this._operate.init();
     },
 
     onEvent() {
         this.offEvent();
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp.bind(this), this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown.bind(this), this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     },
 
     offEvent() {
-        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp.bind(this), this);
-        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown.bind(this), this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     },
 
     initData() {
         this._snakes = [];
         this._walls = [];
         this._apples = [];
-        this._enemySnakes = [];     // 人机蛇
-        this._randomCount = 0;
-        this.level = 5;
+        this._stones = [];
+        this._waters = [];
+        this._doors = [];
+        this._enemySnakes = [];             // 人机蛇
+        this._randomCountForSingleCell = 0;      // 苹果随机位置递归深度
+        this._randomCountForStone = 0;      // 石头随机位置递归深度
+        this._randomCountForWater = 0;      // 水随机位置递归深度
+        this.autoDriverCount = 0;           // 人机蛇位置递归预判深度
         this.score = 0;
+        this.speedstate = false;
         this.current_dir = Enum.Direction.Left;
         this.setMaxScoreLabel();
+        this.setCurrentLevel(4);
+        this.setLifeTime(30);
     },
 
-    initUI() {
-        if (this.level == Enum.Level.Level_1) {
+    setLifeTime(lifeTime) {
+        this.unschedule(this.lifeTimeTimer);
+        this.totalLifeTime = lifeTime;
+        this.remainLifeTime = lifeTime;
+        this.schedule(this.lifeTimeTimer, 0.1, this);
+        this.lifeTimeTimer();
+    },
+
+    lifeTimeTimer() {
+        if (this.remainLifeTime < 0) {
+            this.unschedule(this.lifeTimeTimer);
+            this.runGameOver();
+            return;
+        }
+        this.setLifeTimePercent();
+        this.remainLifeTime -= 0.1;
+    },
+
+    setLifeTimePercent() {
+        let scale = this.remainLifeTime / this.totalLifeTime;
+        if (scale >= 0 && scale <= 1) {
+            // 比例
+            this.lifeTimeNode.scaleX = scale;
+            // 颜色
+            let color = new cc.color(0, 255, 0);
+            if (scale >= 0.2 && scale <= 0.75) {
+                color = new cc.color(255, 255, 0);
+            } else if (scale < 0.2) {
+                color = new cc.color(255, 0, 0);
+            }
+            this.lifeTimeNode.color = color;
+        } else {
+            cc.error("The scale of life time is error = ", scale);
+        }
+    },
+
+    setCurrentLevel(level) {
+        this.level = level;
+        this.currentlevel.string = this.formatNum(level);
+        this.targetScore.string = Enum.Level_Score["Level_" + level];
+        this.initUI(level);
+    },
+
+    initUI(level) {
+        this.deskClear();
+        if (level == Enum.Level.Level_1) {
             this.initUI_1();
-        } else if (this.level == Enum.Level.Level_2) {
+        } else if (level == Enum.Level.Level_2) {
             this.initUI_2();
-        } else if (this.level == Enum.Level.Level_3) {
+        } else if (level == Enum.Level.Level_3) {
             this.initUI_3();
-        } else if (this.level == Enum.Level.Level_4) {
+        } else if (level == Enum.Level.Level_4) {
             this.initUI_4();
-        } else if (this.level == Enum.Level.Level_5) {
+        } else if (level == Enum.Level.Level_5) {
             this.initUI_5();
             // 驱动人机蛇
-            this.driverEnemySanke(Enum.Level_Speed["Level_" + this.level]);
+            this.driverEnemySanke(Enum.Level_Speed["Level_" + level]);
+            // this.driverEnemySanke(1);
         }
         // 驱动
-        this.driverSanke(Enum.Level_Speed["Level_" + this.level]);
+        this.driverSanke(Enum.Level_Speed["Level_" + level]);
     },
 
     initUI_1() {
-        this.deskClear();
         // 蛇本体
         this.initSnake(0, 0, Enum.Direction.Left, 4);
         // 地图
@@ -80,10 +140,82 @@ cc.Class({
         this.initMap(wallPos);
         // 苹果
         this.initApples(1);
+        // 障碍物
+        this.initStones(1);
+    },
+
+    initStones(size) {
+        if (!size) {
+            cc.error("The size of init stones is null or zero");
+            return;
+        }
+        for (let i = 0; i < size; i++) {
+            this.buildStone();
+        }
+    },
+
+    buildStone() {
+        let prefab = app.prefabMgr.getPrefabByName("Stone");
+        let stone = cc.instantiate(prefab);
+        stone.parent = this.stoneNode;
+        var _stone = stone.getComponent("Stone");
+        this._stones.push(_stone);
+        this.initStone(_stone);
+    },
+
+    initStone(_stone) {
+        let { posX, posY } = this.getRandomCellPositionForStone();
+        _stone.init(posX, posY);
+    },
+
+    getRandomCellPositionForStone() {
+        if (this._randomCountForStone >= 30) {
+            cc.error("找不到有效的坐标，石头不显示！！！");
+            this.destroyResForStone();
+            return;
+        }
+        var randomX = Math.floor(Math.random() * (Enum.Design_Cell_Width - 1) * 2) - (Enum.Design_Cell_Width - 1);
+        var randomY = Math.floor(Math.random() * (Enum.Design_Cell_Height - 1) * 2) - (Enum.Design_Cell_Height - 1);
+        if (this.isNotVaildPosForStone(randomX, randomY)) {
+            this._randomCountForStone += 1;     // 循环次数加1
+            return this.getRandomCellPositionForStone();
+        }
+        this._randomCountForStone = 0;
+        return { posX: randomX, posY: randomY };
+    },
+
+    isNotVaildPosForStone(randomX, randomY) {
+        var pos = this.getCellPositionsForStone(randomX, randomY);
+        for (let i = 0; i < pos.length; i++) {
+            const element = pos[i];
+            if (this.isNotVaildPos(element)) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    /**
+     * 获取碰撞的实际占位坐标
+     */
+    getCellPositionsForStone(posX, posY) {
+        var pos = [];
+        pos.push({ posX: posX, posY: posY });
+        pos.push({ posX: posX + 1, posY: posY });
+        pos.push({ posX: posX, posY: posY + 1 });
+        pos.push({ posX: posX + 1, posY: posY + 1 });
+        return pos;
+    },
+
+    destroyResForStone() {
+        for (let i = 0; i < this._stones.length; i++) {
+            let _stone = this._stones[i];
+            _stone.destroyRes();
+        }
+        this._stones = [];
     },
 
     initUI_2() {
-        this.deskClear();
         // 蛇本体
         this.initSnake(0, 0, Enum.Direction.Left, 4);
         // 地图
@@ -100,10 +232,145 @@ cc.Class({
         this.initMap(wallPos);
         // 苹果
         this.initApples(2);
+        // 障碍物
+        this.initStones(1);
+        // 水
+        this.initWaters(1);
+    },
+
+    initWaters(size) {
+        if (!size) {
+            cc.error("The size of init waters is null or zero");
+            return;
+        }
+        for (let i = 0; i < size; i++) {
+            this.buildWater();
+        }
+    },
+
+    buildWater() {
+        let prefab = app.prefabMgr.getPrefabByName("Water");
+        let water = cc.instantiate(prefab);
+        water.parent = this.waterNode;
+        var _water = water.getComponent("Water");
+        this._waters.push(_water);
+        this.initWater(_water);
+    },
+
+    initWater(_water) {
+        let { posX, posY } = this.getRandomCellPositionForWater();
+        _water.init(posX, posY);
+    },
+
+    getRandomCellPositionForWater() {
+        if (this._randomCountForWater >= 30) {
+            cc.error("找不到有效的坐标，水不显示！！！");
+            this.destroyResForWater();
+            return;
+        }
+        var randomX = Math.floor(Math.random() * ((Enum.Design_Cell_Width - 1) * 2 - 1)) - ((Enum.Design_Cell_Width - 1) - 1);
+        var randomY = Math.floor(Math.random() * ((Enum.Design_Cell_Height - 1) * 2 - 1)) - ((Enum.Design_Cell_Height - 1) - 1);
+        let pos = { posX: randomX, posY: randomY };
+        if (this.isNotVaildPosForWaters(pos)) {
+            this._randomCountForWater += 1;     // 循环次数加1
+            return this.getRandomCellPositionForWater();
+        }
+        this._randomCountForWater = 0;
+        return pos;
+    },
+
+    isNotVaildPosForWaters(pos) {
+        var posArray = this.getCellPositionsForWater(pos);
+        for (let i = 0; i < posArray.length; i++) {
+            const element = posArray[i];
+            if (this.isNotVaildPosForWater(element)) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    isNotVaildPosForWater(pos) {
+        let randomX = pos.posX;
+        let randomY = pos.posY;
+        // 在蛇数组
+        for (let i = 0; i < this._snakes.length; i++) {
+            let _body = this._snakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在人机蛇数组
+        for (let i = 0; i < this._enemySnakes.length; i++) {
+            let _body = this._enemySnakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在墙上
+        for (let i = 0; i < this._walls.length; i++) {
+            let _wall = this._walls[i];
+            let { posX, posY } = _wall.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在障碍物上
+        for (let i = 0; i < this._stones.length; i++) {
+            let _stone = this._stones[i];
+            let { posX, posY } = _stone.getCellPosition();
+            let pos = this.getCellPositionsForStone(posX, posY);
+            for (let j = 0; j < pos.length; j++) {
+                const element = pos[j];
+                if (element.posX == randomX && element.posY == randomY) {
+                    return true;
+                }
+            }
+        }
+        // 在水上
+        for (let i = 0; i < this._waters.length; i++) {
+            let _water = this._waters[i];
+            let pos = _water.getCellPosition();
+            let posArray = this.getCellPositionsForWater(pos);
+            for (let j = 0; j < posArray.length; j++) {
+                const element = posArray[j];
+                if (element.posX == randomX && element.posY == randomY) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+
+    /**
+     * 获取碰撞的实际占位坐标
+     */
+    getCellPositionsForWater(pos) {
+        let { posX, posY } = pos;
+        var posArray = [];
+        posArray.push({ posX: posX - 1, posY: posY - 1 });
+        posArray.push({ posX: posX - 1, posY: posY });
+        posArray.push({ posX: posX - 1, posY: posY + 1 });
+        posArray.push({ posX: posX, posY: posY - 1 });
+        posArray.push({ posX: posX, posY: posY });
+        posArray.push({ posX: posX, posY: posY + 1 });
+        posArray.push({ posX: posX + 1, posY: posY - 1 });
+        posArray.push({ posX: posX + 1, posY: posY });
+        posArray.push({ posX: posX + 1, posY: posY + 1 });
+        return posArray;
+    },
+
+    destroyResForWater() {
+        for (let i = 0; i < this._waters.length; i++) {
+            let _water = this._waters[i];
+            _water.destroyRes();
+        }
+        this._waters = [];
     },
 
     initUI_3() {
-        this.deskClear();
         // 蛇本体
         this.initSnake(0, 0, Enum.Direction.Left, 4);
         // 地图
@@ -122,12 +389,15 @@ cc.Class({
         this.initMap(wallPos);
         // 苹果
         this.initApples(3);
+        // 障碍物
+        this.initStones(2);
+        // 水
+        this.initWaters(1);
     },
 
     initUI_4() {
-        this.deskClear();
         // 蛇本体
-        this.initSnake(0, 0, Enum.Direction.Left, 4);
+        this.initSnake(0, 0, Enum.Direction.Left, 30);
         // 地图
         var wallPos = [];
         for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
@@ -152,14 +422,43 @@ cc.Class({
         this.initMap(wallPos);
         // 苹果
         this.initApples(4);
+        // 障碍物
+        this.initStones(2);
+        // 水
+        this.initWaters(1);
+        // 传送门
+        this.buildDoor();
+    },
+
+    buildDoor() {
+        // 一半传送门
+        let prefab = app.prefabMgr.getPrefabByName("Door");
+        if (!prefab) {
+            cc.error("The prefab of door is null");
+            return;
+        }
+        let door1 = cc.instantiate(prefab);
+        door1.parent = this.doorNode;
+        let _door1 = door1.getComponent("Door");
+        this.initDoor(_door1);
+        this._doors.push(_door1);
+        // 另一半传送门
+        let door2 = cc.instantiate(prefab);
+        door2.parent = this.doorNode;
+        let _door2 = door2.getComponent("Door");
+        this.initDoor(_door2);
+        this._doors.push(_door2);
+        // 关联
+        _door1.setAnotherDoor(_door2.getCellPosition());
+        _door2.setAnotherDoor(_door1.getCellPosition());
+    },
+
+    initDoor(_door) {
+        let { posX, posY } = this.getRandomCellPositionForSingleCell();
+        _door.init(posX, posY);
     },
 
     initUI_5() {
-        this.deskClear();
-        // 蛇本体
-        this.initSnake(-4, 0, Enum.Direction.Left, 4);
-        // 人机蛇
-        this.initEnemySnake(4, 0, Enum.Direction.Right, 4);
         // 地图
         var wallPos = [];
         for (let i = -1 * Enum.Design_Cell_Width; i <= Enum.Design_Cell_Width; i++) {
@@ -186,8 +485,16 @@ cc.Class({
             wallPos.push({ posX: i, posY: -1 * Math.floor(Enum.Design_Cell_Height / 2) });
         }
         this.initMap(wallPos);
+        // 蛇本体
+        this.initSnake(-4, 0, Enum.Direction.Left, 4);
+        // 人机蛇
+        this.initEnemySnake(4, 0, Enum.Direction.Right, 4);
         // 苹果
         this.initApples(4);
+        // 障碍物
+        this.initStones(3);
+        // 水
+        this.initWaters(2);
     },
 
     deskClear() {
@@ -212,6 +519,34 @@ cc.Class({
                 _wall.destroyRes();
             }
         }
+        // 清理人机蛇
+        if (this._enemySnakes && this._enemySnakes.length > 0) {
+            for (let i = 0; i < this._enemySnakes.length; i++) {
+                let _enemySnake = this._enemySnakes[i];
+                _enemySnake.destroyRes();
+            }
+        }
+        // 清理障碍物
+        if (this._stones && this._stones.length > 0) {
+            for (let i = 0; i < this._stones.length; i++) {
+                let _stone = this._stones[i];
+                _stone.destroyRes();
+            }
+        }
+        // 清理水
+        if (this._waters && this._waters.length > 0) {
+            for (let i = 0; i < this._waters.length; i++) {
+                let _water = this._waters[i];
+                _water.destroyRes();
+            }
+        }
+        // 清理传送门
+        if (this._doors && this._doors.length > 0) {
+            for (let i = 0; i < this._doors.length; i++) {
+                let _door = this._doors[i];
+                _door.destroyRes();
+            }
+        }
         // 清理数据
         this.initLevelData();
     },
@@ -220,6 +555,9 @@ cc.Class({
         this._snakes = [];
         this._walls = [];
         this._apples = [];
+        this._stones = [];
+        this._waters = [];
+        this._doors = [];
         this.current_dir = Enum.Direction.Left;
     },
 
@@ -230,7 +568,7 @@ cc.Class({
     },
 
     initApple(_apple) {
-        let { posX, posY } = this.getRandomCellPosition();
+        let { posX, posY } = this.getRandomCellPositionForSingleCell();
         return _apple.init(posX, posY);
     },
 
@@ -245,61 +583,146 @@ cc.Class({
         this._apples.push(_apple);
     },
 
-    getRandomCellPosition() {
-        if (this._randomCount >= 30) {
+    /**
+     * 针对单个格子的元素，并且不和其他任何元素重叠
+     */
+    getRandomCellPositionForSingleCell() {
+        if (this._randomCountForSingleCell >= 30) {
             cc.error("找不到有效的坐标，游戏自动结束！！！");
             this.runGameOver();
             return;
         }
         var randomX = Math.floor(Math.random() * (Enum.Design_Cell_Width * 2 - 1)) - (Enum.Design_Cell_Width - 1);
         var randomY = Math.floor(Math.random() * (Enum.Design_Cell_Height * 2 - 1)) - (Enum.Design_Cell_Height - 1);
-        if (this.isNotVaildPos(randomX, randomY)) {
-            this._randomCount += 1;     // 循环次数加1
-            return this.getRandomCellPosition();
+        let pos = { posX: randomX, posY: randomY };
+        if (this.isNotVaildPos(pos)) {
+            this._randomCountForSingleCell += 1;     // 循环次数加1
+            return this.getRandomCellPositionForSingleCell();
         }
-        this._randomCount = 0;
-        return { posX: randomX, posY: randomY };
+        this._randomCountForSingleCell = 0;
+        return pos;
     },
 
-    isNotVaildPos(randomX, randomY) {
-        var flag = false;
-        // 不在蛇数组
+    /**
+     * 判断当前坐标上是不可用的
+     * 苹果
+     * 障碍物
+     * @param {*} pos 
+     */
+    isNotVaildPos(pos) {
+        let randomX = pos.posX;
+        let randomY = pos.posY;
+        // 在蛇数组
         for (let i = 0; i < this._snakes.length; i++) {
             let _body = this._snakes[i];
             let { posX, posY } = _body.getCellPosition();
             if (posX == randomX && posY == randomY) {
-                flag = true;
-                break;
+                return true;
             }
         }
-        // 不在人机蛇数组
+        // 在人机蛇数组
         for (let i = 0; i < this._enemySnakes.length; i++) {
             let _body = this._enemySnakes[i];
             let { posX, posY } = _body.getCellPosition();
             if (posX == randomX && posY == randomY) {
-                flag = true;
-                break;
+                return true;
             }
         }
-        // 不在苹果上
+        // 在苹果上
         for (let i = 0; i < this._apples.length; i++) {
             let _apple = this._apples[i];
             let { posX, posY } = _apple.getCellPosition();
             if (posX == randomX && posY == randomY) {
-                flag = true;
-                break;
+                return true;
             }
         }
-        // 不在墙上
+        // 在墙上
         for (let i = 0; i < this._walls.length; i++) {
             let _wall = this._walls[i];
             let { posX, posY } = _wall.getCellPosition();
             if (posX == randomX && posY == randomY) {
-                flag = true;
-                break;
+                return true;
             }
         }
-        return flag;
+        // 在障碍物上
+        for (let i = 0; i < this._stones.length; i++) {
+            let _stone = this._stones[i];
+            let { posX, posY } = _stone.getCellPosition();
+            let pos = this.getCellPositionsForStone(posX, posY);
+            for (let j = 0; j < pos.length; j++) {
+                const element = pos[j];
+                if (element.posX == randomX && element.posY == randomY) {
+                    return true;
+                }
+            }
+        }
+        // 在水上
+        for (let i = 0; i < this._waters.length; i++) {
+            let _water = this._waters[i];
+            let pos = _water.getCellPosition();
+            let posArray = this.getCellPositionsForWater(pos);
+            for (let j = 0; j < posArray.length; j++) {
+                const element = posArray[j];
+                if (element.posX == randomX && element.posY == randomY) {
+                    return true;
+                }
+            }
+        }
+        // 在传送门上
+        for (let i = 0; i < this._doors.length; i++) {
+            let _door = this._doors[i];
+            let { posX, posY } = _door.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    /**
+     * 判断当前坐标上是不可用的，给人机蛇调用
+     * @param {*} randomPos 
+     */
+    isNotVaildPosToEnemySnake(randomPos) {
+        let randomX = randomPos.posX;
+        let randomY = randomPos.posY;
+        // 在蛇数组
+        for (let i = 0; i < this._snakes.length; i++) {
+            let _body = this._snakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在人机蛇数组
+        for (let i = 0; i < this._enemySnakes.length; i++) {
+            let _body = this._enemySnakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在墙上
+        for (let i = 0; i < this._walls.length; i++) {
+            let _wall = this._walls[i];
+            let { posX, posY } = _wall.getCellPosition();
+            if (posX == randomX && posY == randomY) {
+                return true;
+            }
+        }
+        // 在障碍物上
+        for (let i = 0; i < this._stones.length; i++) {
+            let _stone = this._stones[i];
+            let { posX, posY } = _stone.getCellPosition();
+            let pos = this.getCellPositionsForStone(posX, posY);
+            for (let j = 0; j < pos.length; j++) {
+                const element = pos[j];
+                if (element.posX == randomX && element.posY == randomY) {
+                    return true;
+                }
+            }
+        }
+        return false;
     },
 
     initMap(wallCellPosArray) {
@@ -412,28 +835,125 @@ cc.Class({
             }
         }
         // 渲染头
-        let { posX, posY } = this.getNextCellPosByNode(this._head, true);
         let dir = this._head.getDirection();
         if (this.isVaildDir(dir, this.current_dir)) {
             dir = this.current_dir;
         }
+        this._head.setDirection(dir);
+        let { posX, posY } = this.getNextCellPosByNode(this._head, true);
         this._head.init(posX, posY, dir);
-        // 是否吃到苹果
-        let { flag, _apple } = this.isEatApple(posX, posY);
-        if (flag) {
-            this.gainScore(_apple.getAppleScore());
-            this.initApple(_apple);
-            this.grow();
-        }
+        // 触发行走事件
+        this.onSnakeRunEvent(posX, posY);
+    },
+
+    onSnakeRunEvent(headNextPosX, headNextPosY) {
         // 是否游戏结束
-        if (this.isGameOver(posX, posY)) {
+        if (this.isGameOver(headNextPosX, headNextPosY)) {
             this.runGameOver();
+            return;
         }
+        // 是否吃到苹果
+        if (this._apples && this._apples.length > 0) {
+            let { flag, _apple } = this.isEatApple(headNextPosX, headNextPosY);
+            if (flag) {
+                this.gainScore(_apple.getAppleScore());
+                this.gainLifeTime(_apple.getAppleLifeTime());
+                this.initApple(_apple);
+                this.grow();
+            }
+        }
+        // 踩水
+        this.snakeTreadWater();
+        // 踩传送门
+        if (this._doors && this._doors.length > 0) {
+            let { flag, _door } = this.snakeIsInDoor(headNextPosX, headNextPosY);
+            if (flag) {
+                let { posX, posY } = this.getNextCellPosByDoor(_door);
+                this._head.init(posX, posY);
+                // 触发行走事件
+                this.onSnakeRunEvent(posX, posY);
+            }
+        }
+    },
+
+    /**
+     * 判断是否踩水，并且做出相应的动作
+     */
+    snakeTreadWater() {
+        if (this._waters && this._waters.length > 0) {
+            let { isEnterWater, isExitWater } = this.snakeIsInWater();
+            if (isEnterWater) {
+                // 减速
+                this.speedDown();
+                // 减分
+            } else if (isExitWater) {
+                // 恢复常速
+                this.speedUp();
+            }
+        }
+    },
+
+    snakeIsInDoor(posX, posY) {
+        for (let i = 0; i < this._doors.length; i++) {
+            let _door = this._doors[i];
+            if (_door.posX == posX && _door.posY == posY) {
+                return { flag: true, _door: _door };
+            }
+        }
+        return { flag: false };
+    },
+
+    getNextCellPosByDoor(_door) {
+        let pos = _door.getAnotherDoor();
+        return this.getNextCellPosByNodeForDoor(pos);
+    },
+
+    getNextCellPosByNodeForDoor(pos) {
+        var dir = this._head.getDirection();
+        let { posX, posY } = pos;
+        switch (dir) {
+            case Enum.Direction.Left:
+                return { posX: posX - 1, posY: posY };
+            case Enum.Direction.Down:
+                return { posX: posX, posY: posY - 1 };
+            case Enum.Direction.Right:
+                return { posX: posX + 1, posY: posY };
+            case Enum.Direction.Up:
+                return { posX: posX, posY: posY + 1 };
+        }
+    },
+
+    snakeIsInWater() {
+        var headPos = this._snakes[0].getCellPosition();
+        var neckPos = this._snakes[1].getCellPosition();
+        var isEnterWater = false;
+        var isExitWater = false;
+        if (this.posInWater(headPos) && !this.posInWater(neckPos)) {
+            isEnterWater = true;
+        }
+        if (!this.posInWater(headPos) && this.posInWater(neckPos)) {
+            isExitWater = true;
+        }
+        return { isEnterWater: isEnterWater, isExitWater: isExitWater };
+    },
+
+    posInWater(pos) {
+        for (let i = 0; i < this._waters.length; i++) {
+            let _water = this._waters[i];
+            let waterPos = _water.getCellPosition();
+            let posAarry = this.getCellPositionsForWater(waterPos);
+            for (let j = 0; j < posAarry.length; j++) {
+                const element = posAarry[j];
+                if (element.posX == pos.posX && element.posY == pos.posY) {
+                    return true;
+                }
+            }
+        }
+        return false;
     },
 
     snakeEnemyTimer() {
         this.onEnemySnakeAutoDriver();
-        cc.log();
         // 渲染身体
         for (let i = this._enemySnakes.length - 1; i > 0; i--) {
             let _enemySnake = this._enemySnakes[i];
@@ -445,12 +965,9 @@ cc.Class({
             }
         }
         // 渲染头
+        this._enemyHead.setDirection(this.current_enemy_dir);
         let { posX, posY } = this.getNextCellPosByNode(this._enemyHead, true);
-        let dir = this._enemyHead.getDirection();
-        if (this.isVaildDir(dir, this.current_enemy_dir)) {
-            dir = this.current_enemy_dir;
-        }
-        this._enemyHead.init(posX, posY, dir);
+        this._enemyHead.init(posX, posY, this.current_enemy_dir);
         // 是否吃到苹果
         let { flag, _apple } = this.isEatApple(posX, posY);
         if (flag) {
@@ -460,10 +977,10 @@ cc.Class({
     },
 
     onEnemySnakeAutoDriver() {
-        var vaildPos = this.getVaildPosByAutoDriver();
+        var vaildPos = this.getVaildPosByAutoDriver(this._enemyHead.getCellPosition());
         if (vaildPos.length == 0) {
             // 取消人机蛇的自动驾驶
-            this.unschedule(this.driverEnemySanke);
+            this.unschedule(this.snakeEnemyTimer);
             this.gainScore(Math.ceil(Enum.Level_Score.Level_5 / 2));
             for (let i = 0; i < this._enemySnakes.length; i++) {
                 let _body = this._enemySnakes[i];
@@ -493,20 +1010,54 @@ cc.Class({
         }
     },
 
-    getVaildPosByAutoDriver() {
-        let { posX, posY } = this._enemyHead.getCellPosition();
+    /**
+     * 预判未来2步可选坐标
+     */
+    getVaildPosByAutoDriver(enemyHeadPos) {
+        var vaildPos = this.getVaildPosByRootPos(enemyHeadPos);
+        var childVaildPosLengths = [];
+        var maxLength = 0;
+        var returnVaildPos = [];
+        for (let i = 0; i < vaildPos.length; i++) {
+            let pos = vaildPos[i];
+            let childVaildPosLength = this.getVaildPosByRootPos(pos).length;
+            if (maxLength < childVaildPosLength) {
+                maxLength = childVaildPosLength;
+            }
+            childVaildPosLengths.push({ childLength: childVaildPosLength, pos: pos });
+        }
+        for (let i = 0; i < childVaildPosLengths.length; i++) {
+            const element = childVaildPosLengths[i];
+            if (element.childLength == maxLength) {
+                returnVaildPos.push(element.pos);
+            }
+        }
+        return returnVaildPos;
+    },
+
+    // 四叉树
+    getVaildPosByRootPos(rootPos) {
+        let { posX, posY } = rootPos;
         var vaildPos = [];
-        if (!this.isNotVaildPos({ posX: posX + 1, posY: posY })) {
-            vaildPos.push({ posX: posX + 1, posY: posY });
+        // (x + 1)方向
+        let pos = { posX: posX + 1, posY: posY };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
-        if (!this.isNotVaildPos({ posX: posX, posY: posY + 1 })) {
-            vaildPos.push({ posX: posX, posY: posY + 1 });
+        // (x - 1)方向
+        pos = { posX: posX - 1, posY: posY };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
-        if (!this.isNotVaildPos({ posX: posX, posY: posY - 1 })) {
-            vaildPos.push({ posX: posX, posY: posY - 1 });
+        // (y + 1)方向
+        pos = { posX: posX, posY: posY + 1 };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
-        if (!this.isNotVaildPos({ posX: posX - 1, posY: posY })) {
-            vaildPos.push({ posX: posX - 1, posY: posY });
+        // (y - 1)方向
+        pos = { posX: posX, posY: posY - 1 };
+        if (!this.isNotVaildPosToEnemySnake(pos)) {
+            vaildPos.push(pos);
         }
         return vaildPos;
     },
@@ -519,17 +1070,32 @@ cc.Class({
         this.initEnemyBody(true);
     },
 
+    /**
+     * 加分
+     * @param {*} score 
+     */
     gainScore(score) {
         this.score += score;
-        this.totalScore.string = this.formatScore(this.score);
+        this.totalScore.string = this.formatNum(this.score);
         // 判断过关
         if (this.score > Enum.Level_Score["Level_" + this.level]) {
             this.level += 1;
-            this.initUI();
+            this.setCurrentLevel(this.level);
+            this.totalLifeTime += 30;
+            this.remainLifeTime = this.totalLifeTime;
         }
     },
 
-    formatScore(score) {
+    gainLifeTime(lifeTime) {
+        this.unschedule(this.lifeTimeTimer);
+        this.remainLifeTime += lifeTime;
+        if (this.remainLifeTime > this.totalLifeTime) {
+            this.totalLifeTime = this.remainLifeTime;
+        }
+        this.schedule(this.lifeTimeTimer, 0.1, this);
+    },
+
+    formatNum(score) {
         if (score < 10) {
             return "0" + score;
         } else {
@@ -556,13 +1122,13 @@ cc.Class({
     runGameOver() {
         // 取消所有定时器
         this.unscheduleAllCallbacks();
+        // 取消事件监听
+        this.offEvent();
         // 取消所有的苹果定时器
         for (let i = 0; i < this._apples.length; i++) {
             let _apple = this._apples[i];
             _apple.reset();
         }
-        // 取消事件监听
-        this.offEvent();
         // 闪动
         this.addBlinkAnim();
         // show "GameOver"
@@ -580,7 +1146,7 @@ cc.Class({
     },
 
     setMaxScoreLabel() {
-        this.maxScore.string = this.formatScore(this.getMaxScore());
+        this.maxScore.string = this.formatNum(this.getMaxScore());
     },
 
     getMaxScore() {
@@ -615,6 +1181,26 @@ cc.Class({
             let { posX, posY } = _body.getCellPosition();
             if (headPosX == posX && headPosY == posY) {
                 return true;
+            }
+        }
+        // 撞人机蛇
+        for (let i = 0; i < this._enemySnakes.length; i++) {
+            const _body = this._enemySnakes[i];
+            let { posX, posY } = _body.getCellPosition();
+            if (headPosX == posX && headPosY == posY) {
+                return true;
+            }
+        }
+        // 撞障碍物
+        for (let i = 0; i < this._stones.length; i++) {
+            const _stone = this._stones[i];
+            let { posX, posY } = _stone.getCellPosition();
+            var pos = this.getCellPositionsForStone(posX, posY);
+            for (let j = 0; j < pos.length; j++) {
+                const element = pos[j];
+                if (element.posX == headPosX && element.posY == headPosY) {
+                    return true;
+                }
             }
         }
         return false;
@@ -663,24 +1249,26 @@ cc.Class({
         cc.error("This snakes is null");
     },
 
+    /**
+     * 离开水恢复常速
+     */
     speedUp() {
-        if (this.isRunSpeedUp) {
-            return;
-        }
-        this.speed = 2 * this.getCurrentLevelSpeed();
-        this.speedDriver();
-        this.isRunSpeedUp = true;
+        this.onEvent();
+        this.driverSanke(this.getCurrentLevelSpeed());
     },
 
+    /**
+     * 踩水后减速
+     */
     speedDown() {
-        this.speed = this.getCurrentLevelSpeed();
-        this.speedDriver();
-        this.isRunSpeedUp = false;
+        this.offEvent();
+        let speed = Enum.Level_Speed["Level_" + Enum.Level.Level_1];
+        this.unschedule(this.snakeTimer);
+        this.schedule(this.snakeTimer, speed, this);
     },
 
     driverSanke(speed) {
         this.speed = speed;
-        this.isRunSpeedUp = false;
         this.speedDriver();
     },
 
@@ -692,7 +1280,7 @@ cc.Class({
     speedDriver() {
         this.unschedule(this.snakeTimer);
         this.schedule(this.snakeTimer, this.speed, this);
-        this.snakeTimer();
+        // this.snakeTimer();
     },
 
     speedEnemyDriver() {
@@ -727,9 +1315,19 @@ cc.Class({
 
     onKeyUp(event) {
         switch (event.keyCode) {
+            case cc.macro.KEY.a:
+            case cc.macro.KEY.w:
+            case cc.macro.KEY.d:
+            case cc.macro.KEY.s:
+                this._operate.reset();
+                break;
             case cc.macro.KEY.e:
-                // 加速
+                // 减速
                 // this.speedDown();
+                // cc.log("e键弹起");
+                this.speedstate = false;
+                this.driverSanke(this.getCurrentLevelSpeed());
+                this._operate.resetSpeedUpOpacity();
                 break;
         }
     },
@@ -739,22 +1337,33 @@ cc.Class({
             case cc.macro.KEY.a:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Left;
+                this._operate.setDirOpacity(Enum.Direction.Left);
                 break;
             case cc.macro.KEY.w:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Up;
+                this._operate.setDirOpacity(Enum.Direction.Up);
                 break;
             case cc.macro.KEY.d:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Right;
+                this._operate.setDirOpacity(Enum.Direction.Right);
                 break;
             case cc.macro.KEY.s:
                 // 记录当前方向
                 this.current_dir = Enum.Direction.Down;
+                this._operate.setDirOpacity(Enum.Direction.Down);
                 break;
             case cc.macro.KEY.e:
                 // 加速
                 // this.speedUp();
+                // cc.log("e键按下");
+                if (!this.speedstate) {
+                    this.unschedule(this.snakeTimer);
+                    this._operate.setSpeedUpOpacity();
+                }
+                this.snakeTimer();
+                this.speedstate = true;
                 break;
         }
     },

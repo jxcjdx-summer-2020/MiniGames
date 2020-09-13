@@ -26,12 +26,16 @@ cc.Class({
         this.level = this._logic.level;
         this.lifeTime = this.getCurrentLevelAppleLifeTime();
         this.score = this.lifeTime * this.level;
-        this.schedule(this.appleTimer, 1);
+        this.schedule(this.appleTimer, 1, this);
         return this;
     },
 
     getAppleScore() {
         return this.score;
+    },
+
+    getAppleLifeTime() {
+        return this.lifeTime;
     },
 
     appleTimer() {
@@ -41,8 +45,8 @@ cc.Class({
             this._logic.initApple(this);
             return;
         }
-        // 3秒内闪烁
-        if (this.lifeTime == 3) {
+        // 3秒内闪烁，触发一次
+        if (Math.abs(this.lifeTime - 3) < 0.1) {
             this.addBlinkAnim();
         }
         if (this.score > this.level) {
@@ -52,7 +56,7 @@ cc.Class({
     },
 
     addBlinkAnim() {
-        this.node.runAction(cc.repeatForever(cc.blink(0.5, 1)));
+        this.node.runAction(cc.blink(3, 6));
     },
 
     reset() {

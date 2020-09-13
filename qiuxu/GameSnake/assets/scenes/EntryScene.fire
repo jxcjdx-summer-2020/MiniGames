@@ -57,7 +57,8 @@
     "_is3DNode": true,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "3drJqoK1RBy7mWjiti50BM"
+    "autoReleaseAssets": false,
+    "_id": "d23e455e-d9b4-4449-b4c0-1a0565de4d32"
   },
   {
     "__type__": "cc.Node",
@@ -176,7 +177,7 @@
       "array": [
         0,
         0,
-        328.0860213746754,
+        220.83647796503186,
         0,
         0,
         0,
