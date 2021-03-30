@@ -26,7 +26,7 @@ cc.Class({
     },
 
     setDirOpacity(dir) {
-        this.reset();
+        this.resetDirOpacity();
         if (dir == Enum.Direction.Left) {
             this.dirLeft.opacity = this.pressedOpacity;
         } else if (dir == Enum.Direction.Right) {
@@ -39,10 +39,18 @@ cc.Class({
     },
 
     reset() {
+        this.resetDirOpacity();
+        this.resetSpeedUpOpacity();
+    },
+
+    resetDirOpacity() {
         this.dirUp.opacity = this.unPressedOpacity;
         this.dirDown.opacity = this.unPressedOpacity;
         this.dirLeft.opacity = this.unPressedOpacity;
         this.dirRight.opacity = this.unPressedOpacity;
+    },
+
+    resetSpeedUpOpacity() {
         this.speedUp.opacity = this.unPressedOpacity;
     },
 
